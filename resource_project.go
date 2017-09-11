@@ -5,8 +5,8 @@ import (
 
     "github.com/hashicorp/terraform/helper/schema"
 
-    "github.com/umweltdk/teamcity/teamcity"
-    "github.com/umweltdk/teamcity/types"
+    "github.com/Cardfree/teamcity-sdk-go/teamcity"
+    "github.com/Cardfree/teamcity-sdk-go/types"
 
     "log"
     "reflect"

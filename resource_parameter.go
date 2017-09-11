@@ -5,7 +5,7 @@ import (
   "github.com/hashicorp/terraform/helper/schema"
   "github.com/hashicorp/terraform/helper/hashcode"
 
-  "github.com/umweltdk/teamcity/types"
+  "github.com/Cardfree/teamcity-sdk-go/types"
 
   "log"
 )

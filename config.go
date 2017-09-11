@@ -2,7 +2,7 @@ package main
 
 import (
   "errors"
-  "github.com/umweltdk/teamcity/teamcity"
+  "github.com/Cardfree/teamcity-sdk-go/teamcity"
   "os"
 )
 
