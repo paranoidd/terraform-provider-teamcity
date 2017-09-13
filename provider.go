@@ -1,7 +1,7 @@
 package main
 
 import (
-		"github.com/hashicorp/terraform/helper/schema"
+	"github.com/hashicorp/terraform/helper/schema"
 )
 
 func Provider() *schema.Provider {
@@ -10,21 +10,21 @@ func Provider() *schema.Provider {
 			"user": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Default:     "",
+				DefaultFunc: schema.EnvDefaultFunc("TEAMCITY_USERNAME", nil),
 				Description: descriptions["user"],
 			},
 
 			"password": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Default:     "",
+				DefaultFunc: schema.EnvDefaultFunc("TEAMCITY_PASSWORD", nil),
 				Description: descriptions["password"],
 			},
 
 			"url": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Default:     "",
+				DefaultFunc: schema.EnvDefaultFunc("TEAMCITY_BASE_URL", nil),
 				Description: descriptions["url"],
 			},
 
@@ -43,9 +43,10 @@ func Provider() *schema.Provider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"teamcity_project": resourceProject(),
+			"teamcity_project":             resourceProject(),
+			"teamcity_vcs_root":            resourceVcsRoot(),
 			"teamcity_build_configuration": resourceBuildConfiguration(),
-			"teamcity_build_template": resourceBuildTemplate(),
+			"teamcity_build_template":      resourceBuildTemplate(),
 		},
 		ConfigureFunc: providerConfigure,
 	}
