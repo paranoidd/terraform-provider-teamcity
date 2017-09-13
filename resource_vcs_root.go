@@ -2,7 +2,8 @@ package main
 
 import (
 	// "fmt"
-
+	"github.com/davecgh/go-spew/spew"
+	"github.com/hashicorp/terraform/flatmap"
 	"github.com/hashicorp/terraform/helper/schema"
 
 	// "errors"
@@ -60,13 +61,14 @@ func resourceVcsRootCreate(d *schema.ResourceData, meta interface{}) error {
 	vcsProject := d.Get("project").(string)
 	vcsName := d.Get("name").(string)
 	vcsProvider := d.Get("vcs_provider").(string)
-	vcsProperties := d.Get("properties").(map[string]string)
+	vcsProperties := flatmap.Flatten(d.Get("properties").(map[string]interface{}))
+	spew.Dump(vcsProperties)
 
 	vcs := types.VcsRoot{
 		ProjectID:  types.ProjectId(vcsProject),
 		Name:       vcsName,
 		VcsName:    vcsProvider,
-		Properties: vcsProperties,
+		Properties: types.Properties(vcsProperties),
 	}
 	err := client.CreateVcsRoot(&vcs)
 	if err != nil {
@@ -105,7 +107,9 @@ func resourceVcsRootUpdate(d *schema.ResourceData, meta interface{}) error {
 	id := d.Id()
 	d.Partial(true)
 
-	vcsProperties := types.Properties(d.Get("properties").(map[string]string))
+	tfProperties := d.Get("properties").(map[string]interface{})
+
+	vcsProperties := types.Properties(flatmap.Flatten(tfProperties))
 
 	if d.HasChange("properties") {
 		if err := client.ReplaceAllVcsRootProperties(id, &vcsProperties); err != nil {
