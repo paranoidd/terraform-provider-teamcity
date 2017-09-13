@@ -8,7 +8,7 @@ import (
 
 	//"math/rand"
 	// "reflect"
-	// "testing"
+	"testing"
 	//"time"
 
 	//"github.com/hashicorp/terraform/helper/acctest"
@@ -25,92 +25,23 @@ resource "teamcity_vcs_root" "bar" {
   name = "bar"
 }`
 
-// func TestAccVcsRoot_basic(t *testing.T) {
-// 	var v types.VcsRoot
+func TestAccVcsRoot_basic(t *testing.T) {
+	var v types.VcsRoot
 
-// 	resource.Test(t, resource.TestCase{
-// 		PreCheck:     func() { testAccPreCheck(t) },
-// 		Providers:    testAccProviders,
-// 		CheckDestroy: testAccCheckProjectDestroy,
-// 		Steps: []resource.TestStep{
-// 			resource.TestStep{
-// 				Config: testAccProject,
-// 				Check: resource.ComposeTestCheckFunc(
-// 					testAccCheckProjectExists("teamcity_project.bar", &v),
-// 					testAccCheckProjectAttributes(&v),
-// 					testAccCheckProjectParameters(&v, &types.Parameters{
-// 						"env.TEST": types.Parameter{
-// 							Value: "Hello",
-// 							Spec: &types.ParameterSpec{
-// 								Label:       "Test framework",
-// 								Description: "Name of the test framework to use",
-// 								Type:        types.TextType{"not_empty"},
-// 							},
-// 						},
-// 						"env.MUH": types.Parameter{
-// 							Spec: &types.ParameterSpec{
-// 								Type: types.PasswordType{},
-// 							},
-// 						},
-// 					}),
-// 					resource.TestCheckResourceAttr(
-// 						"teamcity_project.bar", "parent", "Single"),
-// 					resource.TestCheckResourceAttr(
-// 						"teamcity_project.bar", "name", "bar"),
-// 					resource.TestCheckResourceAttr(
-// 						"teamcity_project.bar", "description", ""),
-// 					resource.TestCheckResourceAttr(
-// 						"teamcity_project.bar", "parameter_values.env.TEST", "Hello"),
-// 					testAccCheckParameter("teamcity_project.bar", "env.MUH", types.ParameterSpec{
-// 						Type: types.PasswordType{},
-// 					}),
-// 					testAccCheckParameter("teamcity_project.bar", "env.TEST", types.ParameterSpec{
-// 						Label:       "Test framework",
-// 						Description: "Name of the test framework to use",
-// 						Type:        types.TextType{"not_empty"},
-// 					}),
-// 					resource.TestCheckResourceAttr(
-// 						"teamcity_project.bar", "parameter.#", "2"),
-// 				),
-// 			},
-// 		},
-// 	})
-// }
-
-// var testAccProjectParentParameter = `
-// resource "teamcity_project" "parent" {
-//   name = "Parent"
-//   parameter {
-//     name = "env.CLOVER"
-//     type = "text"
-//     validation_mode = "any"
-//   }
-//   parameter {
-//     name = "env.GROVER"
-//     type = "text"
-//     validation_mode = "any"
-//   }
-//   parameter_values = {
-//     "env.OVER" = "Parent"
-//   }
-// }
-// resource "teamcity_project" "bar" {
-//   parent = "${teamcity_project.parent.id}"
-//   name = "Bar"
-//   parameter {
-//     name = "env.OVER"
-//     type = "checkbox"
-//     checked_value = "Hello"
-//   }
-//   parameter {
-//     name = "env.PLOVER"
-//     type = "checkbox"
-//     checked_value = "Hello"
-//   }
-//   parameter_values {
-//     "env.OVER" = "Owner"
-//   }
-// }`
+	resource.Test(t, resource.TestCase{
+		PreCheck:     func() { testAccPreCheck(t) },
+		Providers:    testAccProviders,
+		CheckDestroy: testAccCheckProjectDestroy,
+		Steps: []resource.TestStep{
+			resource.TestStep{
+				Config: testAccVcsRoot,
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckVcsRootExists("teamcity_vcs_root.bar", &v),
+				),
+			},
+		},
+	})
+}
 
 func testAccCheckVcsRpptDestroy(s *terraform.State) error {
 	client := testAccProvider.Meta().(*teamcity.Client)

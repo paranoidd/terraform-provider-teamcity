@@ -23,6 +23,7 @@ func resourceVcsRoot() *schema.Resource {
 			"project": &schema.Schema{
 				Type:         schema.TypeString,
 				Optional:     true,
+				Default:      "_Root",
 				ForceNew:     true,
 				ValidateFunc: teamcity.ValidateID,
 			},
@@ -34,6 +35,7 @@ func resourceVcsRoot() *schema.Resource {
 			"vcs_provider": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
+				Default:  "jetbrains.git",
 			},
 			"properties": &schema.Schema{
 				Type:     schema.TypeMap,
@@ -55,19 +57,13 @@ func resourceVcsRoot() *schema.Resource {
 func resourceVcsRootCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*teamcity.Client)
 
-	d.Partial(true)
+	// d.Partial(true)
 	project := d.Get("project").(string)
 	name := d.Get("name").(string)
 	vcs_provider := d.Get("vcs_provider").(string)
-	if vcs_provider == "" {
-		vcs_provider = "jetbrains.git"
-	}
-	if project == "" {
-		project = "_Root"
-	}
 
 	vcs := types.VcsRoot{
-		ProjectID: project,
+		ProjectID: types.ProjectId(project),
 		Name:      name,
 		VcsName:   vcs_provider,
 	}
@@ -77,9 +73,10 @@ func resourceVcsRootCreate(d *schema.ResourceData, meta interface{}) error {
 	}
 	id := vcs.ID
 	d.SetId(id)
-	d.SetPartial("project")
-	d.SetPartial("name")
-	d.SetPartial("vcs_provider")
+	d.Set("vcs_provider", vcs.VcsName)
+	// d.SetPartial("project")
+	// d.SetPartial("name")
+	// d.SetPartial("vcs_provider")
 
 	// if parent == "" {
 	// 	parent = "_Root"
@@ -118,7 +115,7 @@ func resourceVcsRootCreate(d *schema.ResourceData, meta interface{}) error {
 	// d.SetPartial("parameter_values")
 	// d.SetPartial("parameter")
 
-	d.Partial(false)
+	// d.Partial(false)
 	return nil
 }
 
