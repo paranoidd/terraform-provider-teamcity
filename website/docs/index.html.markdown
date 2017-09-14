@@ -6,6 +6,7 @@ description: |-
   The Teamcity provider is used to interact with Jetbrains Teamcity services. The provider needs to be configured with the proper credentials before it can be used.
 ---
 
+
 # Teamcity Provider
 
 The Teamcity provider is used to interact with
@@ -13,6 +14,7 @@ The Teamcity provider is used to interact with
 to be configured with the proper credentials before it can be used.
 
 Use the navigation to the left to read about the available resources.
+
 
 ## Example Usage
 
@@ -24,9 +26,15 @@ provider "teamcity" {
   // password = "${var.teamcity_password}"
 }
 ```
-## Teamcity versions
-Compatibility is defined by the [teamcity-go-sdk](https://github.com/Cardfree/teamcity-go-sdk) which ships with this provider.
-* Terraform `<= 0.9.6` - Teamcity `9.x+`
+
+
+## Requirements
+
+Compatibility is defined by [teamcity-go-sdk](https://github.com/Cardfree/teamcity-go-sdk) which bundled with this provider.
+
+-	[Terraform](https://www.terraform.io/downloads.html) 0.10.x
+-	[Go](https://golang.org/doc/install) 1.8 (to build the provider plugin)
+-       [Teamcity](https://www.jetbrains.com/teamcity/)) 9.x - latest
 
 
 ## Argument Reference
