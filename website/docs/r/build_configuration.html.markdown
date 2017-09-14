@@ -1,0 +1,113 @@
+---
+layout: "teamcity"
+page_title: "Teamcity: build_configuration"
+sidebar_current: "docs-teamcity-resource-build-configuration"
+description: |-
+  Provides a Teamcity Build Configuration resource. 
+---
+
+# teamcity\_build\_configuration
+
+Provides a Teamcity Build Configuration resource. 
+
+## Example Usage
+
+```hcl
+resource "teamcity_build_configuration" "default" {
+  project = "DefaultProject"
+  name    = "default-build-configuration"
+
+  parameter {
+    name = "env.TEAMCITY_PASSWORD"
+    type = "password"
+    allow_multiple  = false
+  }
+
+  parameter {
+    name            = "env.TEST"
+    type            = "text"
+    validation_mode = "not_empty"
+    label           = "Test framework"
+    description     = "Name of the test framework to use"
+    allow_multiple  = false
+  }
+
+  parameter_values {
+    "env.TEST" = "Hello"
+  }
+
+  step {
+    type = "simpleRunner"
+    name = "npm"
+
+    properties = {
+      script.content     = <<EOF
+npm run
+npm install
+EOF
+
+      teamcity.step.mode = "default"
+      use.custom.script  = "true"
+    }
+  }
+
+  step {
+    type = "simpleRunner"
+    name = "second"
+
+    properties = {
+      script.content     = "npm uninstall"
+      teamcity.step.mode = "default"
+      use.custom.script  = "true"
+    }
+  }
+
+  attached_vcs_root {
+    vcs_root       = "Root_DefaultVcs"
+    checkout_rules = "+:refs/heads/master\n+:refs/heads/develop"
+  }
+}
+```
+
+## Argument Reference
+
+The following arguments are supported:
+
+* `name` - (Required) Name of the Project.
+* `project` - (Optional) ID of the Project the Build Configuration resides within.
+    Defaults to `_Root`
+* `description` - (Optional) Description of the Build Configuration.
+* `template` - (Optional) template ID for the Build Configuration.
+* `parameter` - (Optional) parameter/s defined for the Build Configuration.
+* `parameter_values` - (Optional) parameter value/s defined for the Build Configuration.
+* `step` - (Optional) Build step/s defined for the Build Configuration.
+* `attached_vcs_root` - (Optional) VCS Root/s attached to the Build Configuration.
+
+---
+
+The `step` block supports:
+* `type` - (Required) Type of the Step. Eg. `simpleRunner`, `MSBuild`, `jetbrains_powershell`, and etc.
+* `name` - (Optional) Name of the Step.
+* `properties` - (Optional) The Properties for the Build Step.
+
+## Attributes Reference
+
+The following attributes are exported:
+
+* `id` - The Build Configuration. ID
+* `name` - The name of the Build Configuration.
+* `project` - ID of the Project the Build Configuration resides within.
+* `description` - Description of the Build Configuration.
+* `template` - (If Defined) template ID for the Build Configuration.
+* `parameter` - (If Defined) parameter/s defined for the Build Configuration.
+* `parameter_values` - (If Defined) parameter value/s defined for the Build Configuration.
+* `step` - (If Defined) Build step/s defined for the Build Configuration.
+* `attached_vcs_root` - (If Defined) VCS Root/s attached to the Build Configuration.
+
+## Import
+
+Build Configurations can be imported using the `id`, e.g.
+
+```
+$ terraform import teamcity_build_configuration.foobar Root_DefaultBuildConfiguration
+```

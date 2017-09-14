@@ -1,10 +1,11 @@
-package main
+package teamcity
 
 import (
 	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/hashicorp/terraform/terraform"
 )
 
-func Provider() *schema.Provider {
+func Provider() terraform.ResourceProvider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
 			"user": {
@@ -24,7 +25,7 @@ func Provider() *schema.Provider {
 			"url": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				DefaultFunc: schema.EnvDefaultFunc("TEAMCITY_BASE_URL", nil),
+				DefaultFunc: schema.EnvDefaultFunc("TEAMCITY_URL", "http://localhost:8111"),
 				Description: descriptions["url"],
 			},
 
