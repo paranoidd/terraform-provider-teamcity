@@ -3,7 +3,7 @@ package teamcity
 import (
 	"errors"
 	"github.com/Cardfree/teamcity-sdk-go/teamcity"
-	"os"
+	// "os"
 )
 
 type Config struct {
