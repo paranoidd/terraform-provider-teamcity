@@ -25,7 +25,7 @@ func Provider() terraform.ResourceProvider {
 			"url": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				DefaultFunc: schema.EnvDefaultFunc("TEAMCITY_BASE_URL", nil),
+				DefaultFunc: schema.EnvDefaultFunc("TEAMCITY_URL", nil),
 				Description: descriptions["url"],
 			},
 

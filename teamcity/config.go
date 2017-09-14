@@ -15,23 +15,23 @@ type Config struct {
 }
 
 func (c *Config) Client() (interface{}, error) {
-	if c.User == "" {
-		c.User = os.Getenv("TEAMCITY_USER")
-	}
+	// if c.User == "" {
+	// 	c.User = os.Getenv("TEAMCITY_USER")
+	// }
 	if c.User == "" {
 		return nil, errors.New("Missing TeamCity user and TEAMCITY_USER not defined")
 	}
 
-	if c.Password == "" {
-		c.Password = os.Getenv("TEAMCITY_PASSWORD")
-	}
+	// if c.Password == "" {
+	// 	c.Password = os.Getenv("TEAMCITY_PASSWORD")
+	// }
 	if c.Password == "" {
 		return nil, errors.New("Missing TeamCity password and TEAMCITY_PASSWORD not defined")
 	}
 
-	if c.URL == "" {
-		c.URL = os.Getenv("TEAMCITY_URL")
-	}
+	// if c.URL == "" {
+	// 	c.URL = os.Getenv("TEAMCITY_URL")
+	// }
 	if c.URL == "" {
 		return nil, errors.New("Missing TeamCity URL and TEAMCITY_URL not defined")
 	}
