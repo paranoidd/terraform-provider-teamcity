@@ -94,10 +94,10 @@ The `step` block supports:
 
 The following attributes are exported:
 
-* `id` - The Project ID
-* `name` - The name of the Project
-* `project` - ID of the Project the Project resides within.
-* `description` - Description of the Project.
+* `id` - The Build Configuration. ID
+* `name` - The name of the Build Configuration.
+* `project` - ID of the Project the Build Configuration resides within.
+* `description` - Description of the Build Configuration.
 * `template` - (If Defined) template ID for the Build Configuration.
 * `parameter` - (If Defined) parameter/s defined for the Build Configuration.
 * `parameter_values` - (If Defined) parameter value/s defined for the Build Configuration.
