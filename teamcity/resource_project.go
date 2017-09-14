@@ -21,8 +21,9 @@ func resourceProject() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"parent": &schema.Schema{
-				Type:         schema.TypeString,
-				Optional:     true,
+				Type:     schema.TypeString,
+				Optional: true,
+				// Default:      "_Root",
 				ForceNew:     true,
 				ValidateFunc: teamcity.ValidateID,
 			},
@@ -83,9 +84,6 @@ func resourceProjectCreate(d *schema.ResourceData, meta interface{}) error {
 	}
 	d.SetPartial("description")
 
-	if parent == "" {
-		parent = "_Root"
-	}
 	var parent_parameters types.Parameters
 	if parent_project, err := client.GetProject(parent); err != nil {
 		return err
