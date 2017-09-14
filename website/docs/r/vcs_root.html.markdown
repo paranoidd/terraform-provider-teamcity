@@ -33,7 +33,7 @@ The following arguments are supported:
 * `provider` - (Optional) The VCS Provider.
     Options include `jetbrains.git`, `svn`, `cvs` and etc.
     Defaults to `jetbrains.git`.
-* `project` - (Optional) The Project this should be created in.
+* `project` - (Optional) ID of the Project the VCS Root resides within.
     Defaults to `_Root`
 
 
