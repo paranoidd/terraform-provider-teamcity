@@ -31,9 +31,10 @@ The following arguments are supported:
 * `name` - (Required) Name of the VCS Root.
 * `properties` - (Required) The Properties for the VCS Root.
 * `provider` - (Optional) The VCS Provider.
-    This defaults to `jetbrains.git`. Other options include `svn` and `cvs`
+    Options include `jetbrains.git`, `svn`, `cvs` and etc.
+    Defaults to `jetbrains.git`.
 * `project` - (Optional) The Project this should be created in.
-    This defaults to `_Root`
+    Defaults to `_Root`
 
 
 ## Attributes Reference

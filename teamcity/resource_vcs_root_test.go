@@ -23,6 +23,11 @@ var testAccVcsRoot = `
 resource "teamcity_vcs_root" "bar" {
   project = "Single"
   name = "bar"
+
+  properties = {
+    url    = "https://github.com/cardfree/teamcity-sdk-go"
+    branch = "refs/heads/master"
+  }
 }`
 
 func TestAccVcsRoot_basic(t *testing.T) {
