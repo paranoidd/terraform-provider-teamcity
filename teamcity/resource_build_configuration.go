@@ -55,7 +55,7 @@ func resourceBuildSharedDependencyObject() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"dependence": &schema.Schema{
+			"dependent": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 			},
@@ -590,7 +590,7 @@ func resourceBuildSnapshotDependencies(snapshotDependencies []interface{}) types
 	for _, s := range snapshotDependencies {
 		snapshotDependency := s.(map[string]interface{})
 		typeName := snapshotDependency["type"].(string)
-		dependence := snapshotDependency["dependence"].(string)
+		dependent := snapshotDependency["dependent"].(string)
 		properties := snapshotDependency["properties"].(map[string]interface{})
 		actualProps := make(types.Properties)
 		for k, v := range properties {
@@ -601,7 +601,7 @@ func resourceBuildSnapshotDependencies(snapshotDependencies []interface{}) types
 			Type:       typeName,
 			Properties: actualProps,
 			SourceBuildType: types.BuildType{
-				ID: dependence,
+				ID: dependent,
 			},
 		})
 	}
@@ -614,7 +614,7 @@ func resourceBuildArtifactDependencies(artifactDependencies []interface{}) types
 	for _, s := range artifactDependencies {
 		artifactDependency := s.(map[string]interface{})
 		typeName := artifactDependency["type"].(string)
-		dependence := artifactDependency["dependence"].(string)
+		dependent := artifactDependency["dependent"].(string)
 		properties := artifactDependency["properties"].(map[string]interface{})
 		actualProps := make(types.Properties)
 		for k, v := range properties {
@@ -625,7 +625,7 @@ func resourceBuildArtifactDependencies(artifactDependencies []interface{}) types
 			Type:       typeName,
 			Properties: actualProps,
 			SourceBuildType: types.BuildType{
-				ID: dependence,
+				ID: dependent,
 			},
 		})
 	}
