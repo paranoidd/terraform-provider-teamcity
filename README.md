@@ -5,8 +5,8 @@ Requirements
 ------------
 
 -	[Terraform](https://www.terraform.io/downloads.html) 0.10.x
--	[Go](https://golang.org/doc/install) 1.8 (to build the provider plugin)
--	[teamcity-dsk-go](https://github.com/Cardfree/teamcity-sdk-go) (SDK dependency for building the provider)
+  -[Go](https://golang.org/doc/install) 1.8 (to build the provider plugin)
+  -[teamcity-dsk-go](https://github.com/Cardfree/teamcity-sdk-go) (SDK dependency for building the provider)
 
 
 Documentation
@@ -49,3 +49,8 @@ In order to run the full suite of Acceptance tests, run `make testacc`.
 ```sh
 $ make testacc
 ```
+
+### Development Resources on the Web
+
+[Perl5 Teamcity API](http://eilara.github.io/perl5-teamcity-api/)
+[Swagger](https://dploeger.github.io/teamcity-rest-ap)
