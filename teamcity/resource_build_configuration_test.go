@@ -81,10 +81,6 @@ func TestAccBuildConfig_basic(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"teamcity_build_configuration.bar", "name", "bar"),
 					resource.TestCheckResourceAttr(
-						"teamcity_build_configuration.bar", "template", ""),
-					resource.TestCheckResourceAttr(
-						"teamcity_build_configuration.bar", "description", ""),
-					resource.TestCheckResourceAttr(
 						"teamcity_build_configuration.bar", "step.0.type", "simpleRunner"),
 					resource.TestCheckResourceAttr(
 						"teamcity_build_configuration.bar", "step.0.name", "Hell0"),

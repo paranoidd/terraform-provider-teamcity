@@ -73,8 +73,6 @@ func TestAccProject_basic(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"teamcity_project.bar", "name", "bar"),
 					resource.TestCheckResourceAttr(
-						"teamcity_project.bar", "description", ""),
-					resource.TestCheckResourceAttr(
 						"teamcity_project.bar", "parameter_values.env.TEST", "Hello"),
 					testAccCheckParameter("teamcity_project.bar", "env.MUH", types.ParameterSpec{
 						Type: types.PasswordType{},
