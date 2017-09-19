@@ -3,7 +3,7 @@ layout: "teamcity"
 page_title: "Provider: Teamcity"
 sidebar_current: "docs-teamcity-index"
 description: |-
-  The Teamcity provider is used to interact with Jetbrains Teamcity services. The provider needs to be configured with the proper credentials before it can be used.
+  The Teamcity provider is used to interact with Jetbrains Teamcity server. The provider needs to be configured with the proper credentials before it can be used.
 ---
 
 
@@ -34,7 +34,7 @@ Compatibility is defined by [teamcity-go-sdk](https://github.com/Cardfree/teamci
 
 -	[Terraform](https://www.terraform.io/downloads.html) 0.10.x
 -	[Go](https://golang.org/doc/install) 1.8 (to build the provider plugin)
--       [Teamcity](https://www.jetbrains.com/teamcity/)) 9.x - latest
+-	[Teamcity](https://www.jetbrains.com/teamcity/)) 9.x - latest
 
 
 ## Argument Reference

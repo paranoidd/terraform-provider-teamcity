@@ -73,7 +73,7 @@ EOF
 
 The following arguments are supported:
 
-* `name` - (Required) Name of the Project.
+* `name` - (Required) Name of the Build Configuration.
 * `project` - (Optional) ID of the Project the Build Configuration resides within.
     Defaults to `_Root`
 * `description` - (Optional) Description of the Build Configuration.
@@ -81,14 +81,27 @@ The following arguments are supported:
 * `parameter` - (Optional) parameter/s defined for the Build Configuration.
 * `parameter_values` - (Optional) parameter value/s defined for the Build Configuration.
 * `step` - (Optional) Build step/s defined for the Build Configuration.
+    * `type` - (Required) Type of the Step. Eg. `simpleRunner`, `MSBuild`, `jetbrains_powershell`, and etc.
+    * `name` - (Optional) Name of the Step.
+    * `properties` - (Optional) The Properties for the Step.
+* `feature`- (Optional)
+    * `type` - (Required) Type of the Feature.
+    * `properties` - (Optional) The Properties for the Feature.
+* `trigger` - (Optional) a rule which initiates a new build on certain events.
+    * `type` - (Required) Type of the Trigger.
+    * `properties` - (Optional) The Properties for the Trigger.
+* `snapshot_dependency`- (Optional) A build configuration can be made dependent on the sources of builds
+    * `type` - (Required) Type of the Snapshot Dependency.
+    * `dependent` (Required) - ID of the Build your are Dependent on.
+    * `properties` - (Optional) The Properties for the Snapshot Dependency.
+* `artifact_dependency` - (Optional) A build configuration can be made dependent on the artifacts 
+    * `type` - (Required) Type of the Artifact Dependency.
+    * `dependent` (Required) - ID of the Build your are Dependent on.
+    * `properties` - (Optional) The Properties for the Artifact Dependency.
+* `agent_requirement` - (Optional)  a piece of functionality that  affect running builds or reporting build results.
+    * `name` - (Optional) Name of the Agent Requirement.
+    * `properties` - (Optional) The Properties for the Agent Requirement.
 * `attached_vcs_root` - (Optional) VCS Root/s attached to the Build Configuration.
-
----
-
-The `step` block supports:
-* `type` - (Required) Type of the Step. Eg. `simpleRunner`, `MSBuild`, `jetbrains_powershell`, and etc.
-* `name` - (Optional) Name of the Step.
-* `properties` - (Optional) The Properties for the Build Step.
 
 ## Attributes Reference
 
@@ -102,6 +115,11 @@ The following attributes are exported:
 * `parameter` - (If Defined) parameter/s defined for the Build Configuration.
 * `parameter_values` - (If Defined) parameter value/s defined for the Build Configuration.
 * `step` - (If Defined) Build step/s defined for the Build Configuration.
+* `feature` - (If Defined) Build feature/s defined for the Build Configuration.
+* `trigger` - (If Defined) Build trigger/s defined for the Build Configuration.
+* `snapshot_dependency` - (If Defined) Build snapshot dependency/s defined for the Build Configuration.
+* `artifact_dependency` - (If Defined) Build artifact dependency/s defined for the Build Configuration.
+* `agent_requirement` - (If Defined) Build agent requirement/s defined for the Build Configuration.
 * `attached_vcs_root` - (If Defined) VCS Root/s attached to the Build Configuration.
 
 ## Import

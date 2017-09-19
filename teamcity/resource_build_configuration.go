@@ -33,6 +33,40 @@ func resourceBuildStep() *schema.Resource {
 	}
 }
 
+func resourceBuildSharedObject() *schema.Resource {
+	return &schema.Resource{
+		Schema: map[string]*schema.Schema{
+			"type": &schema.Schema{
+				Type:     schema.TypeString,
+				Required: true,
+			},
+			"properties": &schema.Schema{
+				Type:     schema.TypeMap,
+				Optional: true,
+			},
+		},
+	}
+}
+
+func resourceBuildSharedDependencyObject() *schema.Resource {
+	return &schema.Resource{
+		Schema: map[string]*schema.Schema{
+			"type": &schema.Schema{
+				Type:     schema.TypeString,
+				Required: true,
+			},
+			"dependent": &schema.Schema{
+				Type:     schema.TypeString,
+				Required: true,
+			},
+			"properties": &schema.Schema{
+				Type:     schema.TypeMap,
+				Optional: true,
+			},
+		},
+	}
+}
+
 func resourceAttachedVcsRoot() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
@@ -55,6 +89,9 @@ func resourceBuildConfiguration() *schema.Resource {
 		Read:   resourceBuildConfigurationRead,
 		Update: resourceBuildConfigurationUpdate,
 		Delete: resourceBuildConfigurationDelete,
+		Importer: &schema.ResourceImporter{
+			State: schema.ImportStatePassthrough,
+		},
 
 		Schema: map[string]*schema.Schema{
 			"project": &schema.Schema{
@@ -77,6 +114,12 @@ func resourceBuildConfiguration() *schema.Resource {
 				Optional:     true,
 				ValidateFunc: teamcity.ValidateID,
 			},
+			"attached_vcs_root": &schema.Schema{
+				Type:     schema.TypeSet,
+				Elem:     resourceAttachedVcsRoot(),
+				Set:      attachedVcsRootValueHash,
+				Optional: true,
+			},
 			"parameter": &schema.Schema{
 				Type:     schema.TypeSet,
 				Elem:     resourceParameter(),
@@ -92,10 +135,29 @@ func resourceBuildConfiguration() *schema.Resource {
 				Elem:     resourceBuildStep(),
 				Optional: true,
 			},
-			"attached_vcs_root": &schema.Schema{
-				Type:     schema.TypeSet,
-				Elem:     resourceAttachedVcsRoot(),
-				Set:      attachedVcsRootValueHash,
+			"feature": &schema.Schema{
+				Type:     schema.TypeList,
+				Elem:     resourceBuildSharedObject(),
+				Optional: true,
+			},
+			"trigger": &schema.Schema{
+				Type:     schema.TypeList,
+				Elem:     resourceBuildSharedObject(),
+				Optional: true,
+			},
+			"snapshot_dependency": &schema.Schema{
+				Type:     schema.TypeList,
+				Elem:     resourceBuildSharedDependencyObject(),
+				Optional: true,
+			},
+			"artifact_dependency": &schema.Schema{
+				Type:     schema.TypeList,
+				Elem:     resourceBuildSharedDependencyObject(),
+				Optional: true,
+			},
+			"agent_requirement": &schema.Schema{
+				Type:     schema.TypeList,
+				Elem:     resourceBuildSharedObject(),
 				Optional: true,
 			},
 		},
@@ -111,9 +173,10 @@ func resourceBuildTemplate() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"project": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
+				ValidateFunc: teamcity.ValidateID,
 			},
 			"name": &schema.Schema{
 				Type:     schema.TypeString,
@@ -122,6 +185,12 @@ func resourceBuildTemplate() *schema.Resource {
 			},
 			"description": &schema.Schema{
 				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"attached_vcs_root": &schema.Schema{
+				Type:     schema.TypeSet,
+				Elem:     resourceAttachedVcsRoot(),
+				Set:      attachedVcsRootValueHash,
 				Optional: true,
 			},
 			"parameter": &schema.Schema{
@@ -139,10 +208,29 @@ func resourceBuildTemplate() *schema.Resource {
 				Elem:     resourceBuildStep(),
 				Optional: true,
 			},
-			"attached_vcs_root": &schema.Schema{
-				Type:     schema.TypeSet,
-				Elem:     resourceAttachedVcsRoot(),
-				Set:      attachedVcsRootValueHash,
+			"feature": &schema.Schema{
+				Type:     schema.TypeList,
+				Elem:     resourceBuildSharedObject(),
+				Optional: true,
+			},
+			"trigger": &schema.Schema{
+				Type:     schema.TypeList,
+				Elem:     resourceBuildSharedObject(),
+				Optional: true,
+			},
+			"snapshot_dependency": &schema.Schema{
+				Type:     schema.TypeList,
+				Elem:     resourceBuildSharedDependencyObject(),
+				Optional: true,
+			},
+			"artifact_dependency": &schema.Schema{
+				Type:     schema.TypeList,
+				Elem:     resourceBuildSharedDependencyObject(),
+				Optional: true,
+			},
+			"agent_requirement": &schema.Schema{
+				Type:     schema.TypeList,
+				Elem:     resourceBuildSharedObject(),
 				Optional: true,
 			},
 		},
@@ -182,16 +270,21 @@ func resourceBuildTemplateDelete(d *schema.ResourceData, meta interface{}) error
 }
 
 /*
-   ID             string         `json:"id,omitempty"`
-   ProjectID      string         `json:"projectId"`
-   TemplateFlag   bool           `json:"templateFlag"`
-   Template       *TemplateID    `json:"template,omitempty"`
-   Name           string         `json:"name"`
-   Description    string         `json:"description,omitempty"`
-   Settings       Properties     `json:"settings,omitempty"`
-   Parameters     Properties     `json:"parameters,omitempty"`
-   Steps          BuildSteps     `json:"steps,omitempty"`
-   VcsRootEntries VcsRootEntries `json:"vcs-root-entries,omitempty"`
+	ID                   string                    `json:"id,omitempty"`
+	ProjectID            string                    `json:"projectId"`
+	TemplateFlag         bool                      `json:"templateFlag"`
+	TemplateID           TemplateId                `json:"template,omitempty"`
+	Name                 string                    `json:"name"`
+	Description          string                    `json:"description,omitempty"`
+	VcsRootEntries       VcsRootEntries            `json:"vcs-root-entries,omitempty"`
+	Settings             Properties                `json:"settings,omitempty"`
+	Parameters           Parameters                `json:"parameters,omitempty"`
+	Steps                BuildSteps                `json:"steps,omitempty"`
+	Features             BuildFeatures             `json:"features,omitempty"`
+	Triggers             BuildTriggers             `json:"triggers,omitempty"`
+	SnapshotDependencies BuildSnapshotDependencies `json:"snapshot-dependencies,omitempty"`
+	ArtifactDependencies BuildArtifactDependencies `json:"artifact-dependencies,omitempty"`
+	AgentRequirements    BuildAgentRequirements    `json:"agent-requirements,omitempty"`
 */
 
 func resourceBuildConfigurationCreateInternal(d *schema.ResourceData, meta interface{}, template bool) error {
@@ -200,6 +293,11 @@ func resourceBuildConfigurationCreateInternal(d *schema.ResourceData, meta inter
 	projectID := d.Get("project").(string)
 	name := d.Get("name").(string)
 	steps := resourceBuildSteps(d.Get("step").([]interface{}))
+	features := resourceBuildFeatures(d.Get("feature").([]interface{}))
+	triggers := resourceBuildTriggers(d.Get("trigger").([]interface{}))
+	snapshotDependencies := resourceBuildSnapshotDependencies(d.Get("snapshot_dependency").([]interface{}))
+	artifactDependencies := resourceBuildArtifactDependencies(d.Get("artifact_dependency").([]interface{}))
+	agentRequirements := resourceBuildAgentRequirements(d.Get("agent_requirement").([]interface{}))
 	d.Partial(true)
 	templateID := ""
 	if !template {
@@ -235,12 +333,17 @@ func resourceBuildConfigurationCreateInternal(d *schema.ResourceData, meta inter
 	}
 
 	config := types.BuildConfiguration{
-		ProjectID:    projectID,
-		TemplateFlag: template,
-		TemplateID:   types.TemplateId(templateID),
-		Name:         name,
-		Description:  d.Get("description").(string),
-		Steps:        steps,
+		ProjectID:            projectID,
+		TemplateFlag:         template,
+		TemplateID:           types.TemplateId(templateID),
+		Name:                 name,
+		Description:          d.Get("description").(string),
+		Steps:                steps,
+		Features:             features,
+		Triggers:             triggers,
+		SnapshotDependencies: snapshotDependencies,
+		ArtifactDependencies: artifactDependencies,
+		AgentRequirements:    agentRequirements,
 	}
 
 	if err := client.CreateBuildConfiguration(&config); err != nil {
@@ -255,6 +358,11 @@ func resourceBuildConfigurationCreateInternal(d *schema.ResourceData, meta inter
 		d.SetPartial("template")
 	}
 	d.SetPartial("step")
+	d.SetPartial("feature")
+	d.SetPartial("trigger")
+	d.SetPartial("snapshot_dependency")
+	d.SetPartial("artifact_dependency")
+	d.SetPartial("agent_requirement")
 
 	for name, v := range d.Get("parameter_values").(map[string]interface{}) {
 		value := v.(string)
@@ -314,6 +422,12 @@ func resourceBuildConfigurationReadInternal(d *schema.ResourceData, meta interfa
 	templateID := string(config.TemplateID)
 	template_parameters := make(types.Parameters)
 	template_steps := make(types.BuildSteps, 0)
+	template_features := make(types.BuildFeatures, 0)
+	template_triggers := make(types.BuildTriggers, 0)
+	template_snapshot_dependencies := make(types.BuildSnapshotDependencies, 0)
+	template_artifact_dependencies := make(types.BuildArtifactDependencies, 0)
+	template_agent_requirements := make(types.BuildAgentRequirements, 0)
+
 	template_vcs_roots := make(types.VcsRootEntries, 0)
 	if templateID != "" {
 		if template_config, err := client.GetBuildConfiguration(templateID); err != nil {
@@ -321,6 +435,12 @@ func resourceBuildConfigurationReadInternal(d *schema.ResourceData, meta interfa
 		} else {
 			template_parameters = template_config.Parameters
 			template_steps = template_config.Steps
+			template_features = template_config.Features
+			template_triggers = template_config.Triggers
+			template_snapshot_dependencies = template_config.SnapshotDependencies
+			template_artifact_dependencies = template_config.ArtifactDependencies
+			template_agent_requirements = template_config.AgentRequirements
+
 			template_vcs_roots = template_config.VcsRootEntries
 		}
 	}
@@ -353,6 +473,142 @@ func resourceBuildConfigurationReadInternal(d *schema.ResourceData, meta interfa
 	}
 	log.Printf("[INFO] Steps %q\n", steps)
 	d.Set("step", steps)
+
+	features := make([]map[string]interface{}, 0)
+	for _, feature := range config.Features {
+		inTemplate := false
+		for _, template_feature := range template_features {
+			if feature.ID == template_feature.ID {
+				inTemplate = true
+				break
+			}
+		}
+		if inTemplate {
+			continue
+		}
+		v := make(map[string]interface{})
+		v["type"] = feature.Type
+		properties := make(map[string]interface{})
+		for name, prop := range feature.Properties {
+			properties[name] = prop
+		}
+		if len(properties) > 0 {
+			v["properties"] = properties
+		}
+		features = append(features, v)
+	}
+	log.Printf("[INFO] Features %q\n", features)
+	d.Set("feature", features)
+
+	triggers := make([]map[string]interface{}, 0)
+	for _, trigger := range config.Triggers {
+		inTemplate := false
+		for _, template_trigger := range template_triggers {
+			if trigger.ID == template_trigger.ID {
+				inTemplate = true
+				break
+			}
+		}
+		if inTemplate {
+			continue
+		}
+		v := make(map[string]interface{})
+		v["type"] = trigger.Type
+		properties := make(map[string]interface{})
+		for name, prop := range trigger.Properties {
+			properties[name] = prop
+		}
+		if len(properties) > 0 {
+			v["properties"] = properties
+		}
+		triggers = append(triggers, v)
+	}
+	log.Printf("[INFO] Triggers %q\n", triggers)
+	d.Set("trigger", triggers)
+
+	snapshot_dependencies := make([]map[string]interface{}, 0)
+	for _, snapshot_dependency := range config.SnapshotDependencies {
+		inTemplate := false
+		for _, template_snapshot_dependency := range template_snapshot_dependencies {
+			if snapshot_dependency.ID == template_snapshot_dependency.ID {
+				inTemplate = true
+				break
+			}
+		}
+		if inTemplate {
+			continue
+		}
+		v := make(map[string]interface{})
+		v["type"] = snapshot_dependency.Type
+		if snapshot_dependency.SourceBuildType.ID != "" {
+			v["dependent"] = snapshot_dependency.SourceBuildType.ID
+		}
+		properties := make(map[string]interface{})
+		for name, prop := range snapshot_dependency.Properties {
+			properties[name] = prop
+		}
+		if len(properties) > 0 {
+			v["properties"] = properties
+		}
+		snapshot_dependencies = append(snapshot_dependencies, v)
+	}
+	log.Printf("[INFO] SnapshotDependencies %q\n", snapshot_dependencies)
+	d.Set("snapshot_dependency", snapshot_dependencies)
+
+	artifact_dependencies := make([]map[string]interface{}, 0)
+	for _, artifact_dependency := range config.ArtifactDependencies {
+		inTemplate := false
+		for _, template_artifact_dependency := range template_artifact_dependencies {
+			if artifact_dependency.ID == template_artifact_dependency.ID {
+				inTemplate = true
+				break
+			}
+		}
+		if inTemplate {
+			continue
+		}
+		v := make(map[string]interface{})
+		v["type"] = artifact_dependency.Type
+		if artifact_dependency.SourceBuildType.ID != "" {
+			v["dependent"] = artifact_dependency.SourceBuildType.ID
+		}
+		properties := make(map[string]interface{})
+		for name, prop := range artifact_dependency.Properties {
+			properties[name] = prop
+		}
+		if len(properties) > 0 {
+			v["properties"] = properties
+		}
+		artifact_dependencies = append(artifact_dependencies, v)
+	}
+	log.Printf("[INFO] ArtifactDependencies %q\n", artifact_dependencies)
+	d.Set("artifact_dependency", artifact_dependencies)
+
+	agent_requirements := make([]map[string]interface{}, 0)
+	for _, agent_requirement := range config.AgentRequirements {
+		inTemplate := false
+		for _, template_agent_requirement := range template_agent_requirements {
+			if agent_requirement.ID == template_agent_requirement.ID {
+				inTemplate = true
+				break
+			}
+		}
+		if inTemplate {
+			continue
+		}
+		v := make(map[string]interface{})
+		v["type"] = agent_requirement.Type
+		properties := make(map[string]interface{})
+		for name, prop := range agent_requirement.Properties {
+			properties[name] = prop
+		}
+		if len(properties) > 0 {
+			v["properties"] = properties
+		}
+		agent_requirements = append(agent_requirements, v)
+	}
+	log.Printf("[INFO] AgentRequirements %q\n", agent_requirements)
+	d.Set("agent_requirement", agent_requirements)
 
 	var project_parameters types.Parameters
 	if project, err := client.GetProject(string(config.ProjectID)); err != nil {
@@ -440,6 +696,114 @@ func resourceBuildSteps(steps []interface{}) types.BuildSteps {
 	return tcSteps
 }
 
+func resourceBuildFeatures(features []interface{}) types.BuildFeatures {
+	tcFeatures := make(types.BuildFeatures, 0)
+	for _, s := range features {
+		feature := s.(map[string]interface{})
+		typeName := feature["type"].(string)
+		properties := feature["properties"].(map[string]interface{})
+		actualProps := make(types.Properties)
+		for k, v := range properties {
+			actualProps[k] = v.(string)
+		}
+
+		tcFeatures = append(tcFeatures, types.BuildFeature{
+			Type:       typeName,
+			Properties: actualProps,
+		})
+	}
+
+	return tcFeatures
+}
+
+func resourceBuildTriggers(triggers []interface{}) types.BuildTriggers {
+	tcTriggers := make(types.BuildTriggers, 0)
+	for _, s := range triggers {
+		trigger := s.(map[string]interface{})
+		typeName := trigger["type"].(string)
+		properties := trigger["properties"].(map[string]interface{})
+		actualProps := make(types.Properties)
+		for k, v := range properties {
+			actualProps[k] = v.(string)
+		}
+
+		tcTriggers = append(tcTriggers, types.BuildTrigger{
+			Type:       typeName,
+			Properties: actualProps,
+		})
+	}
+
+	return tcTriggers
+}
+
+func resourceBuildSnapshotDependencies(snapshotDependencies []interface{}) types.BuildSnapshotDependencies {
+	tcSnapshotDependencies := make(types.BuildSnapshotDependencies, 0)
+	for _, s := range snapshotDependencies {
+		snapshotDependency := s.(map[string]interface{})
+		typeName := snapshotDependency["type"].(string)
+		dependent := snapshotDependency["dependent"].(string)
+		properties := snapshotDependency["properties"].(map[string]interface{})
+		actualProps := make(types.Properties)
+		for k, v := range properties {
+			actualProps[k] = v.(string)
+		}
+
+		tcSnapshotDependencies = append(tcSnapshotDependencies, types.BuildSnapshotDependency{
+			Type:       typeName,
+			Properties: actualProps,
+			SourceBuildType: types.BuildType{
+				ID: dependent,
+			},
+		})
+	}
+
+	return tcSnapshotDependencies
+}
+
+func resourceBuildArtifactDependencies(artifactDependencies []interface{}) types.BuildArtifactDependencies {
+	tcArtifactDependencies := make(types.BuildArtifactDependencies, 0)
+	for _, s := range artifactDependencies {
+		artifactDependency := s.(map[string]interface{})
+		typeName := artifactDependency["type"].(string)
+		dependent := artifactDependency["dependent"].(string)
+		properties := artifactDependency["properties"].(map[string]interface{})
+		actualProps := make(types.Properties)
+		for k, v := range properties {
+			actualProps[k] = v.(string)
+		}
+
+		tcArtifactDependencies = append(tcArtifactDependencies, types.BuildArtifactDependency{
+			Type:       typeName,
+			Properties: actualProps,
+			SourceBuildType: types.BuildType{
+				ID: dependent,
+			},
+		})
+	}
+
+	return tcArtifactDependencies
+}
+
+func resourceBuildAgentRequirements(agentRequirements []interface{}) types.BuildAgentRequirements {
+	tcAgentRequirements := make(types.BuildAgentRequirements, 0)
+	for _, s := range agentRequirements {
+		agentRequirement := s.(map[string]interface{})
+		typeName := agentRequirement["type"].(string)
+		properties := agentRequirement["properties"].(map[string]interface{})
+		actualProps := make(types.Properties)
+		for k, v := range properties {
+			actualProps[k] = v.(string)
+		}
+
+		tcAgentRequirements = append(tcAgentRequirements, types.BuildAgentRequirement{
+			Type:       typeName,
+			Properties: actualProps,
+		})
+	}
+
+	return tcAgentRequirements
+}
+
 func resourceAttachedVcsRoots(vcsRoots schema.Set) types.VcsRootEntries {
 	keySet := schema.NewSet(attachedVcsRootKeyHash, vcsRoots.List())
 	tcRoots := make(types.VcsRootEntries, 0)
@@ -464,6 +828,12 @@ func resourceBuildConfigurationUpdateInternal(d *schema.ResourceData, meta inter
 	d.Partial(true)
 
 	steps := resourceBuildSteps(d.Get("step").([]interface{}))
+	features := resourceBuildFeatures(d.Get("feature").([]interface{}))
+	triggers := resourceBuildTriggers(d.Get("trigger").([]interface{}))
+	snapshotDependencies := resourceBuildSnapshotDependencies(d.Get("snapshot_dependency").([]interface{}))
+	artifactDependencies := resourceBuildArtifactDependencies(d.Get("artifact_dependency").([]interface{}))
+	agentRequirements := resourceBuildAgentRequirements(d.Get("agent_requirement").([]interface{}))
+
 	templateID := ""
 	if !template {
 		templateID = d.Get("template").(string)
@@ -475,7 +845,6 @@ func resourceBuildConfigurationUpdateInternal(d *schema.ResourceData, meta inter
 		} else {
 			template_parameters = template_config.Parameters
 			if len(template_config.Steps) > 0 && len(steps) > 0 {
-				// return fmt.Errorf("Can't combine build config steps and template build steps %s", name)
 				return fmt.Errorf("Can't combine build config steps and template build steps")
 			}
 		}
@@ -583,6 +952,36 @@ func resourceBuildConfigurationUpdateInternal(d *schema.ResourceData, meta inter
 			return err
 		}
 		d.SetPartial("step")
+	}
+	if d.HasChange("feature") {
+		if err := client.ReplaceAllBuildConfigurationFeatures(id, &features); err != nil {
+			return err
+		}
+		d.SetPartial("feature")
+	}
+	if d.HasChange("trigger") {
+		if err := client.ReplaceAllBuildConfigurationTriggers(id, &triggers); err != nil {
+			return err
+		}
+		d.SetPartial("trigger")
+	}
+	if d.HasChange("snapshot_dependency") {
+		if err := client.ReplaceAllBuildConfigurationSnapshotDependencies(id, &snapshotDependencies); err != nil {
+			return err
+		}
+		d.SetPartial("snapshot_dependency")
+	}
+	if d.HasChange("artifact_dependency") {
+		if err := client.ReplaceAllBuildConfigurationArtifactDependencies(id, &artifactDependencies); err != nil {
+			return err
+		}
+		d.SetPartial("artifact_dependency")
+	}
+	if d.HasChange("agent_requirement") {
+		if err := client.ReplaceAllBuildConfigurationAgentRequirements(id, &agentRequirements); err != nil {
+			return err
+		}
+		d.SetPartial("agent_requirement")
 	}
 	if !template && d.HasChange("template") && templateID != "" {
 		if err := client.SetBuildConfigurationTemplate(id, templateID); err != nil {

@@ -6,7 +6,7 @@ Requirements
 
 -	[Terraform](https://www.terraform.io/downloads.html) 0.10.x
 -	[Go](https://golang.org/doc/install) 1.8 (to build the provider plugin)
--	[teamcity-dsk-go](https://github.com/Cardfree/teamcity-sdk-go)(SDK dependency for building the provider)
+-	[teamcity-dsk-go](https://github.com/Cardfree/teamcity-sdk-go) (SDK dependency for building the provider)
 
 
 Documentation
@@ -14,7 +14,7 @@ Documentation
 
 - [Teamcity Provider](website/docs/index.html.markdown)
 - Resources
-  - [projectt](website/docs/r/project.html.markdown)
+  - [project](website/docs/r/project.html.markdown)
   - [vcs_root](website/docs/r/vcs_root.html.markdown)
   - [build_configuration](website/docs/r/build_configuration.html.markdown)
   - [build_template](website/docs/r/build_template.html.markdown)
