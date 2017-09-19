@@ -19,6 +19,9 @@ func resourceVcsRoot() *schema.Resource {
 		Read:   resourceVcsRootRead,
 		Update: resourceVcsRootUpdate,
 		Delete: resourceVcsRootDelete,
+		Importer: &schema.ResourceImporter{
+			State: schema.ImportStatePassthrough,
+		},
 
 		Schema: map[string]*schema.Schema{
 			"project": &schema.Schema{

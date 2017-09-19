@@ -89,6 +89,9 @@ func resourceBuildConfiguration() *schema.Resource {
 		Read:   resourceBuildConfigurationRead,
 		Update: resourceBuildConfigurationUpdate,
 		Delete: resourceBuildConfigurationDelete,
+		Importer: &schema.ResourceImporter{
+			State: schema.ImportStatePassthrough,
+		},
 
 		Schema: map[string]*schema.Schema{
 			"project": &schema.Schema{
@@ -419,6 +422,12 @@ func resourceBuildConfigurationReadInternal(d *schema.ResourceData, meta interfa
 	templateID := string(config.TemplateID)
 	template_parameters := make(types.Parameters)
 	template_steps := make(types.BuildSteps, 0)
+	template_features := make(types.BuildFeatures, 0)
+	template_triggers := make(types.BuildTriggers, 0)
+	template_snapshot_dependencies := make(types.BuildSnapshotDependencies, 0)
+	template_artifact_dependencies := make(types.BuildArtifactDependencies, 0)
+	template_agent_requirements := make(types.BuildAgentRequirements, 0)
+
 	template_vcs_roots := make(types.VcsRootEntries, 0)
 	if templateID != "" {
 		if template_config, err := client.GetBuildConfiguration(templateID); err != nil {
@@ -426,6 +435,12 @@ func resourceBuildConfigurationReadInternal(d *schema.ResourceData, meta interfa
 		} else {
 			template_parameters = template_config.Parameters
 			template_steps = template_config.Steps
+			template_features = template_config.Features
+			template_triggers = template_config.Triggers
+			template_snapshot_dependencies = template_config.SnapshotDependencies
+			template_artifact_dependencies = template_config.ArtifactDependencies
+			template_agent_requirements = template_config.AgentRequirements
+
 			template_vcs_roots = template_config.VcsRootEntries
 		}
 	}
@@ -458,6 +473,142 @@ func resourceBuildConfigurationReadInternal(d *schema.ResourceData, meta interfa
 	}
 	log.Printf("[INFO] Steps %q\n", steps)
 	d.Set("step", steps)
+
+	features := make([]map[string]interface{}, 0)
+	for _, feature := range config.Features {
+		inTemplate := false
+		for _, template_feature := range template_features {
+			if feature.ID == template_feature.ID {
+				inTemplate = true
+				break
+			}
+		}
+		if inTemplate {
+			continue
+		}
+		v := make(map[string]interface{})
+		v["type"] = feature.Type
+		properties := make(map[string]interface{})
+		for name, prop := range feature.Properties {
+			properties[name] = prop
+		}
+		if len(properties) > 0 {
+			v["properties"] = properties
+		}
+		features = append(features, v)
+	}
+	log.Printf("[INFO] Features %q\n", features)
+	d.Set("feature", features)
+
+	triggers := make([]map[string]interface{}, 0)
+	for _, trigger := range config.Triggers {
+		inTemplate := false
+		for _, template_trigger := range template_triggers {
+			if trigger.ID == template_trigger.ID {
+				inTemplate = true
+				break
+			}
+		}
+		if inTemplate {
+			continue
+		}
+		v := make(map[string]interface{})
+		v["type"] = trigger.Type
+		properties := make(map[string]interface{})
+		for name, prop := range trigger.Properties {
+			properties[name] = prop
+		}
+		if len(properties) > 0 {
+			v["properties"] = properties
+		}
+		triggers = append(triggers, v)
+	}
+	log.Printf("[INFO] Triggers %q\n", triggers)
+	d.Set("trigger", triggers)
+
+	snapshot_dependencies := make([]map[string]interface{}, 0)
+	for _, snapshot_dependency := range config.SnapshotDependencies {
+		inTemplate := false
+		for _, template_snapshot_dependency := range template_snapshot_dependencies {
+			if snapshot_dependency.ID == template_snapshot_dependency.ID {
+				inTemplate = true
+				break
+			}
+		}
+		if inTemplate {
+			continue
+		}
+		v := make(map[string]interface{})
+		v["type"] = snapshot_dependency.Type
+		if snapshot_dependency.SourceBuildType.ID != "" {
+			v["dependent"] = snapshot_dependency.SourceBuildType.ID
+		}
+		properties := make(map[string]interface{})
+		for name, prop := range snapshot_dependency.Properties {
+			properties[name] = prop
+		}
+		if len(properties) > 0 {
+			v["properties"] = properties
+		}
+		snapshot_dependencies = append(snapshot_dependencies, v)
+	}
+	log.Printf("[INFO] SnapshotDependencies %q\n", snapshot_dependencies)
+	d.Set("snapshot_dependency", snapshot_dependencies)
+
+	artifact_dependencies := make([]map[string]interface{}, 0)
+	for _, artifact_dependency := range config.ArtifactDependencies {
+		inTemplate := false
+		for _, template_artifact_dependency := range template_artifact_dependencies {
+			if artifact_dependency.ID == template_artifact_dependency.ID {
+				inTemplate = true
+				break
+			}
+		}
+		if inTemplate {
+			continue
+		}
+		v := make(map[string]interface{})
+		v["type"] = artifact_dependency.Type
+		if artifact_dependency.SourceBuildType.ID != "" {
+			v["dependent"] = artifact_dependency.SourceBuildType.ID
+		}
+		properties := make(map[string]interface{})
+		for name, prop := range artifact_dependency.Properties {
+			properties[name] = prop
+		}
+		if len(properties) > 0 {
+			v["properties"] = properties
+		}
+		artifact_dependencies = append(artifact_dependencies, v)
+	}
+	log.Printf("[INFO] ArtifactDependencies %q\n", artifact_dependencies)
+	d.Set("artifact_dependency", artifact_dependencies)
+
+	agent_requirements := make([]map[string]interface{}, 0)
+	for _, agent_requirement := range config.AgentRequirements {
+		inTemplate := false
+		for _, template_agent_requirement := range template_agent_requirements {
+			if agent_requirement.ID == template_agent_requirement.ID {
+				inTemplate = true
+				break
+			}
+		}
+		if inTemplate {
+			continue
+		}
+		v := make(map[string]interface{})
+		v["type"] = agent_requirement.Type
+		properties := make(map[string]interface{})
+		for name, prop := range agent_requirement.Properties {
+			properties[name] = prop
+		}
+		if len(properties) > 0 {
+			v["properties"] = properties
+		}
+		agent_requirements = append(agent_requirements, v)
+	}
+	log.Printf("[INFO] AgentRequirements %q\n", agent_requirements)
+	d.Set("agent_requirement", agent_requirements)
 
 	var project_parameters types.Parameters
 	if project, err := client.GetProject(string(config.ProjectID)); err != nil {
