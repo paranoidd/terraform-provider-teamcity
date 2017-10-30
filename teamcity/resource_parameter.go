@@ -34,6 +34,10 @@ func resourceParameter() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
+			"read_only": &schema.Schema{
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
 			// Checkbox type options
 			"checked_value": &schema.Schema{
 				Type:     schema.TypeString,
@@ -93,6 +97,7 @@ func parametersToDefinition(parameters types.Parameters) *schema.Set {
 			spec := *parameter.Spec
 			param["label"] = spec.Label
 			param["description"] = spec.Description
+			param["read_only"] = spec.ReadOnly
 
 			typeName := spec.Type.TypeName()
 			param["type"] = typeName

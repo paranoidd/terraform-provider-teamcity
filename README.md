@@ -5,8 +5,8 @@ Requirements
 ------------
 
 -	[Terraform](https://www.terraform.io/downloads.html) 0.10.x
-  -[Go](https://golang.org/doc/install) 1.8 (to build the provider plugin)
-  -[teamcity-dsk-go](https://github.com/Cardfree/teamcity-sdk-go) (SDK dependency for building the provider)
+-	[Go](https://golang.org/doc/install) 1.9 (to build the provider plugin)
+-	[teamcity-dsk-go](https://github.com/Cardfree/teamcity-sdk-go) (SDK dependency for building the provider)
 
 
 Documentation
@@ -20,10 +20,18 @@ Documentation
   - [build_template](website/docs/r/build_template.html.markdown)
 
 
-Developing the Provider
+## Installing the Provider
+
+```bash
+go build -o ~/.terraform.d/plugins/terraform-provider-teamcity 
+```
+
+
+
+'Developing the Provider
 -----------------------
 
-If you wish to work on the provider, you'll first need [Go](http://www.golang.org) installed on your machine (version 1.8+ is *required*).
+If you wish to work on the provider, you'll first need [Go](http://www.golang.org) installed on your machine (version 1.9+ is *required*).
 You'll also need to correctly setup a [GOPATH](http://golang.org/doc/code.html#GOPATH), as well as adding `$GOPATH/bin` to your `$PATH`.
 
 To compile the provider, run `make build`. This will build the provider and put the provider binary in the `$GOPATH/bin` directory.
