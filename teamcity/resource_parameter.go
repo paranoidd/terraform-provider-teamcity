@@ -34,10 +34,10 @@ func resourceParameter() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"read_only": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-			},
+			// "read_only": &schema.Schema{
+			// 	Type:     schema.TypeBool,
+			// 	Optional: true,
+			// },
 			// Checkbox type options
 			"checked_value": &schema.Schema{
 				Type:     schema.TypeString,
@@ -97,7 +97,7 @@ func parametersToDefinition(parameters types.Parameters) *schema.Set {
 			spec := *parameter.Spec
 			param["label"] = spec.Label
 			param["description"] = spec.Description
-			param["read_only"] = spec.ReadOnly
+			// param["read_only"] = spec.ReadOnly
 
 			typeName := spec.Type.TypeName()
 			param["type"] = typeName
@@ -151,7 +151,8 @@ func definitionToParameterSpec(param map[string]interface{}) *types.ParameterSpe
 		ret := &types.ParameterSpec{
 			Label:       param["label"].(string),
 			Description: param["description"].(string),
-			Type:        tp,
+			// ReadOnly:    param["readOnly"].(types.ReadOnly),
+			Type: tp,
 		}
 		log.Printf("Parameter %s => %q", param["name"].(string), ret)
 		return ret
