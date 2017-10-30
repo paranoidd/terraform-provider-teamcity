@@ -16,10 +16,10 @@ type Config struct {
 
 func (c *Config) Client() (interface{}, error) {
 	// if c.User == "" {
-	// 	c.User = os.Getenv("TEAMCITY_USER")
+	// 	c.User = os.Getenv("TEAMCITY_USERNAME")
 	// }
 	if c.User == "" {
-		return nil, errors.New("Missing TeamCity user and TEAMCITY_USER not defined")
+		return nil, errors.New("Missing TeamCity user and TEAMCITY_USERNAME not defined")
 	}
 
 	// if c.Password == "" {
