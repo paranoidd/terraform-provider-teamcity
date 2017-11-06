@@ -24,9 +24,9 @@ func resourceProject() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"parent": &schema.Schema{
-				Type:     schema.TypeString,
-				Optional: true,
-				// Default:      "_Root",
+				Type:         schema.TypeString,
+				Optional:     true,
+				Default:      "_Root",
 				ForceNew:     true,
 				ValidateFunc: teamcity.ValidateID,
 			},
@@ -62,10 +62,17 @@ func resourceProject() *schema.Resource {
 
 func resourceProjectCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*teamcity.Client)
-
 	d.Partial(true)
+
 	parent := d.Get("parent").(string)
+	if parent != "_Root" {
+		d.SetPartial("parent")
+	}
+
+	log.Printf("Reading project parent %q", parent)
 	name := d.Get("name").(string)
+	d.SetPartial("name")
+
 	project := types.Project{
 		ParentProjectID: types.ProjectId(parent),
 		Name:            name,
@@ -74,10 +81,9 @@ func resourceProjectCreate(d *schema.ResourceData, meta interface{}) error {
 	if err != nil {
 		return err
 	}
+
 	id := project.ID
 	d.SetId(id)
-	d.SetPartial("parent")
-	d.SetPartial("name")
 
 	description := d.Get("description").(string)
 	if description != "" {
@@ -132,16 +138,15 @@ func resourceProjectRead(d *schema.ResourceData, meta interface{}) error {
 	if err != nil {
 		return err
 	}
+
 	if project == nil {
 		d.SetId("")
 		return nil
 	}
 
 	parent := project.ParentProjectID
-	if parent == "_Root" {
-		parent = ""
-	}
 	d.Set("parent", parent)
+
 	d.Set("name", project.Name)
 	d.Set("description", project.Description)
 
