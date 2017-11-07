@@ -33,6 +33,22 @@ func resourceBuildStep() *schema.Resource {
 	}
 }
 
+func resourceSetting() *schema.Resource {
+	return &schema.Resource{
+		Schema: map[string]*schema.Schema{
+			"name": &schema.Schema{
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: teamcity.ValidateID,
+			},
+			"value": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+		},
+	}
+}
+
 func resourceBuildSharedObject() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
@@ -107,6 +123,11 @@ func resourceBuildConfiguration() *schema.Resource {
 			},
 			"description": &schema.Schema{
 				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"property": &schema.Schema{
+				Type:     schema.TypeSet,
+				Elem:     resourceSetting(),
 				Optional: true,
 			},
 			"template": &schema.Schema{
@@ -293,6 +314,7 @@ func resourceBuildConfigurationCreateInternal(d *schema.ResourceData, meta inter
 	projectID := d.Get("project").(string)
 	name := d.Get("name").(string)
 	steps := resourceBuildSteps(d.Get("step").([]interface{}))
+	properties := resourceBuildProperties(d.Get("property").([]interface{}))
 	features := resourceBuildFeatures(d.Get("feature").([]interface{}))
 	triggers := resourceBuildTriggers(d.Get("trigger").([]interface{}))
 	snapshotDependencies := resourceBuildSnapshotDependencies(d.Get("snapshot_dependency").([]interface{}))
@@ -338,6 +360,7 @@ func resourceBuildConfigurationCreateInternal(d *schema.ResourceData, meta inter
 		TemplateID:           types.TemplateId(templateID),
 		Name:                 name,
 		Description:          d.Get("description").(string),
+		Settings:             properties,
 		Steps:                steps,
 		Features:             features,
 		Triggers:             triggers,
@@ -674,6 +697,22 @@ func resourceBuildConfigurationReadInternal(d *schema.ResourceData, meta interfa
 	return nil
 }
 
+func resourceBuildProperties(properties []interface{}) types.Properties {
+	tcProperties := make(types.Properties, 0)
+	for _, s := range properties {
+		property := s.(map[string]interface{})
+		name := property["name"].(string)
+		value := property["value"].(string)
+
+		tcProperties = append(tcProperties, types.oneProperty{
+			Name:  name,
+			Value: value,
+		})
+	}
+
+	return tcProperties
+}
+
 func resourceBuildSteps(steps []interface{}) types.BuildSteps {
 	tcSteps := make(types.BuildSteps, 0)
 	for _, s := range steps {
@@ -828,6 +867,7 @@ func resourceBuildConfigurationUpdateInternal(d *schema.ResourceData, meta inter
 	d.Partial(true)
 
 	steps := resourceBuildSteps(d.Get("step").([]interface{}))
+	properties := resourceBuildProperties(d.Get("property").([]interface{}))
 	features := resourceBuildFeatures(d.Get("feature").([]interface{}))
 	triggers := resourceBuildTriggers(d.Get("trigger").([]interface{}))
 	snapshotDependencies := resourceBuildSnapshotDependencies(d.Get("snapshot_dependency").([]interface{}))
