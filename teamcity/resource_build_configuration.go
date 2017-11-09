@@ -870,7 +870,9 @@ func resourceBuildConfigurationUpdateInternal(d *schema.ResourceData, meta inter
 
 		o, n := d.GetChange("parameter")
 		parameters := definitionToParameters(*n.(*schema.Set))
+		log.Printf("[MY_TRACE] Parmeters: %q", parameters)
 		old := definitionToParameters(*o.(*schema.Set))
+		log.Printf("[MY_TRACE] Old Parmeters: %q", old)
 		replace_parameters := make(types.Parameters)
 		delete_parameters := old
 		for name, parameter := range parameters {
@@ -885,6 +887,16 @@ func resourceBuildConfigurationUpdateInternal(d *schema.ResourceData, meta inter
 			}
 			delete(delete_parameters, name)
 		}
+
+		log.Printf("[MY_TRACE] Delete Parmeters: %q", delete_parameters)
+
+		// ov, nv := d.GetChange("parameter_value")
+		// parameter_values := definitionToParameters(*nv.(*schema.Set))
+		// old_paramter_values := definitionToParameters(*ov.(*schema.Set))
+
+		// log.Printf("[MY_TRACE] Parmeter Valuess: %q", parameter_values)
+		// log.Printf("[MY_TRACE] Old Parmeter Valuess: %q", old_paramter_values)
+
 		for name, v := range d.Get("parameter_values").(map[string]interface{}) {
 			value := v.(string)
 			parameter, ok := parameters[name]
@@ -900,6 +912,7 @@ func resourceBuildConfigurationUpdateInternal(d *schema.ResourceData, meta inter
 			parameter.Value = value
 			replace_parameters[name] = parameter
 		}
+		log.Printf("[MY_TRACE] Replace Parmeters: %q", replace_parameters)
 		for name, _ := range delete_parameters {
 			if err := client.DeleteBuildConfigurationParameter(id, name); err != nil {
 				return err
