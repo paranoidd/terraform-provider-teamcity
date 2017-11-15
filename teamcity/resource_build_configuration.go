@@ -934,36 +934,22 @@ func resourceBuildConfigurationUpdateInternal(d *schema.ResourceData, meta inter
 
 	if d.HasChange("setting") {
 		o, n := d.GetChange("setting")
-		for _, settings := range o.([]interface{}) {
-			var name string
-			var value string
-			for k, v := range settings.(map[string]interface{}) {
-				if k == "name" {
-					name = v.(string)
-				}
-				if k == "value" {
-					value = v.(string)
-				}
+		for _, s := range o.([]interface{}) {
+			property := s.(map[string]interface{})
+			name := property["name"].(string)
+			value := property["value"].(string)
 
-			}
 			log.Printf("Removing Setting '%s' => '%s'", name, value)
 			if err := client.DeleteBuildConfigurationSetting(id, name); err != nil {
 				return err
 			}
 
 		}
-		for _, settings := range n.([]interface{}) {
-			var name string
-			var value string
-			for k, v := range settings.(map[string]interface{}) {
-				if k == "name" {
-					name = v.(string)
-				}
-				if k == "value" {
-					value = v.(string)
-				}
+		for _, s := range n.([]interface{}) {
+			property := s.(map[string]interface{})
+			name := property["name"].(string)
+			value := property["value"].(string)
 
-			}
 			log.Printf("Replacing Setting '%s' => '%s'", name, value)
 			if err := client.DeleteBuildConfigurationSetting(id, name); err != nil {
 				return err
