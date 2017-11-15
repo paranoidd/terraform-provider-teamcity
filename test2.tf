@@ -5,7 +5,7 @@ resource "teamcity_project" "default" {
     name = "env.READ_ONLY"
     type = "text"
 
-    # read_only = "true"
+    read_only = true
 
     # validation_mode = "any"
   }

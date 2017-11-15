@@ -99,6 +99,7 @@ func resourceVcsRootRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("project", vcs.ProjectID)
 	d.Set("name", vcs.Name)
 	d.Set("vcs_provider", vcs.VcsName)
+	d.Set("properties", vcs.Properties)
 
 	return nil
 }

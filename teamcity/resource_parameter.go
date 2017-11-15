@@ -99,9 +99,9 @@ func parametersToDefinition(parameters types.Parameters) *schema.Set {
 			param["description"] = spec.Description
 
 			// log.Printf("Reading project resource %q", d.Id())
-			// if spec.ReadOnly {
-			param["readOnly"] = "true" // spec.ReadOnly
-			// }
+			if spec.ReadOnly {
+				param["readOnly"] = spec.ReadOnly
+			}
 
 			typeName := spec.Type.TypeName()
 			param["type"] = typeName
@@ -154,8 +154,13 @@ func definitionToParameterSpec(param map[string]interface{}) *types.ParameterSpe
 			tp = &types.TextType{"any"}
 		}
 
-		if param["readOnly"] != nil {
-			ro = param["readOnly"].(types.ReadOnly)
+		if param["read_only"] != nil {
+			if param["read_only"] == true {
+				ro = types.ReadOnly(true)
+			} else {
+				ro = types.ReadOnly(false)
+			}
+
 		}
 		ret := &types.ParameterSpec{
 			Label:       param["label"].(string),

@@ -33,6 +33,21 @@ func resourceBuildStep() *schema.Resource {
 	}
 }
 
+func resourceBuildSetting() *schema.Resource {
+	return &schema.Resource{
+		Schema: map[string]*schema.Schema{
+			"name": &schema.Schema{
+				Type:     schema.TypeString,
+				Required: true,
+			},
+			"value": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+		},
+	}
+}
+
 func resourceBuildSharedObject() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
@@ -107,6 +122,11 @@ func resourceBuildConfiguration() *schema.Resource {
 			},
 			"description": &schema.Schema{
 				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"setting": &schema.Schema{
+				Type:     schema.TypeList,
+				Elem:     resourceBuildSetting(),
 				Optional: true,
 			},
 			"template": &schema.Schema{
@@ -185,6 +205,11 @@ func resourceBuildTemplate() *schema.Resource {
 			},
 			"description": &schema.Schema{
 				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"setting": &schema.Schema{
+				Type:     schema.TypeList,
+				Elem:     resourceBuildSetting(),
 				Optional: true,
 			},
 			"attached_vcs_root": &schema.Schema{
@@ -277,7 +302,7 @@ func resourceBuildTemplateDelete(d *schema.ResourceData, meta interface{}) error
 	Name                 string                    `json:"name"`
 	Description          string                    `json:"description,omitempty"`
 	VcsRootEntries       VcsRootEntries            `json:"vcs-root-entries,omitempty"`
-	Settings             Properties                `json:"settings,omitempty"`
+	Settings             BuildSettings             `json:"settings,omitempty"`
 	Parameters           Parameters                `json:"parameters,omitempty"`
 	Steps                BuildSteps                `json:"steps,omitempty"`
 	Features             BuildFeatures             `json:"features,omitempty"`
@@ -293,6 +318,7 @@ func resourceBuildConfigurationCreateInternal(d *schema.ResourceData, meta inter
 	projectID := d.Get("project").(string)
 	name := d.Get("name").(string)
 	steps := resourceBuildSteps(d.Get("step").([]interface{}))
+	settings := resourceBuildSettings(d.Get("setting").([]interface{}))
 	features := resourceBuildFeatures(d.Get("feature").([]interface{}))
 	triggers := resourceBuildTriggers(d.Get("trigger").([]interface{}))
 	snapshotDependencies := resourceBuildSnapshotDependencies(d.Get("snapshot_dependency").([]interface{}))
@@ -338,6 +364,7 @@ func resourceBuildConfigurationCreateInternal(d *schema.ResourceData, meta inter
 		TemplateID:           types.TemplateId(templateID),
 		Name:                 name,
 		Description:          d.Get("description").(string),
+		Settings:             settings,
 		Steps:                steps,
 		Features:             features,
 		Triggers:             triggers,
@@ -357,6 +384,7 @@ func resourceBuildConfigurationCreateInternal(d *schema.ResourceData, meta inter
 	if !template {
 		d.SetPartial("template")
 	}
+	d.SetPartial("setting")
 	d.SetPartial("step")
 	d.SetPartial("feature")
 	d.SetPartial("trigger")
@@ -421,6 +449,7 @@ func resourceBuildConfigurationReadInternal(d *schema.ResourceData, meta interfa
 
 	templateID := string(config.TemplateID)
 	template_parameters := make(types.Parameters)
+	template_settings := make(types.BuildSettings, 0)
 	template_steps := make(types.BuildSteps, 0)
 	template_features := make(types.BuildFeatures, 0)
 	template_triggers := make(types.BuildTriggers, 0)
@@ -434,6 +463,7 @@ func resourceBuildConfigurationReadInternal(d *schema.ResourceData, meta interfa
 			return err
 		} else {
 			template_parameters = template_config.Parameters
+			template_settings = template_config.Settings
 			template_steps = template_config.Steps
 			template_features = template_config.Features
 			template_triggers = template_config.Triggers
@@ -444,6 +474,32 @@ func resourceBuildConfigurationReadInternal(d *schema.ResourceData, meta interfa
 			template_vcs_roots = template_config.VcsRootEntries
 		}
 	}
+
+	settings := make([]map[string]interface{}, 0)
+	for _, setting := range config.Settings {
+		inTemplate := false
+		for _, template_setting := range template_settings {
+			if setting.Name == template_setting.Name {
+				inTemplate = true
+				break
+			}
+		}
+		if inTemplate {
+			continue
+		}
+
+		if setting.Name == "buildNumberCounter" {
+			continue
+		}
+
+		v := make(map[string]interface{})
+		v["name"] = setting.Name
+		v["value"] = setting.Value
+
+		settings = append(settings, v)
+	}
+	log.Printf("[INFO] Settings %q\n", settings)
+	d.Set("setting", settings)
 
 	steps := make([]map[string]interface{}, 0)
 	for _, step := range config.Steps {
@@ -674,6 +730,22 @@ func resourceBuildConfigurationReadInternal(d *schema.ResourceData, meta interfa
 	return nil
 }
 
+func resourceBuildSettings(settings []interface{}) types.BuildSettings {
+	tcSettings := make(types.BuildSettings, 0)
+	for _, s := range settings {
+		property := s.(map[string]interface{})
+		name := property["name"].(string)
+		value := property["value"].(string)
+
+		tcSettings = append(tcSettings, types.BuildSetting{
+			Name:  name,
+			Value: value,
+		})
+	}
+
+	return tcSettings
+}
+
 func resourceBuildSteps(steps []interface{}) types.BuildSteps {
 	tcSteps := make(types.BuildSteps, 0)
 	for _, s := range steps {
@@ -828,6 +900,7 @@ func resourceBuildConfigurationUpdateInternal(d *schema.ResourceData, meta inter
 	d.Partial(true)
 
 	steps := resourceBuildSteps(d.Get("step").([]interface{}))
+	// settings := resourceBuildSettings(d.Get("setting").([]interface{}))
 	features := resourceBuildFeatures(d.Get("feature").([]interface{}))
 	triggers := resourceBuildTriggers(d.Get("trigger").([]interface{}))
 	snapshotDependencies := resourceBuildSnapshotDependencies(d.Get("snapshot_dependency").([]interface{}))
@@ -857,6 +930,36 @@ func resourceBuildConfigurationUpdateInternal(d *schema.ResourceData, meta inter
 		if templateID == "" {
 			d.SetPartial("template")
 		}
+	}
+
+	if d.HasChange("setting") {
+		o, n := d.GetChange("setting")
+		for _, s := range o.([]interface{}) {
+			property := s.(map[string]interface{})
+			name := property["name"].(string)
+			value := property["value"].(string)
+
+			log.Printf("Removing Setting '%s' => '%s'", name, value)
+			if err := client.DeleteBuildConfigurationSetting(id, name); err != nil {
+				return err
+			}
+
+		}
+		for _, s := range n.([]interface{}) {
+			property := s.(map[string]interface{})
+			name := property["name"].(string)
+			value := property["value"].(string)
+
+			log.Printf("Replacing Setting '%s' => '%s'", name, value)
+			if err := client.DeleteBuildConfigurationSetting(id, name); err != nil {
+				return err
+			}
+			if err := client.ReplaceBuildConfigurationSetting(id, name, value); err != nil {
+				return err
+			}
+		}
+
+		d.SetPartial("setting")
 	}
 
 	if d.HasChange("parameter") || (!template && d.HasChange("template")) {
