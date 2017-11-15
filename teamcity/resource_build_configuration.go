@@ -520,6 +520,10 @@ func resourceBuildConfigurationReadInternal(d *schema.ResourceData, meta interfa
 		}
 		properties := make(map[string]interface{})
 		for name, prop := range step.Properties {
+			if properties[name] == "teamcity.step.mode" {
+				continue
+			}
+
 			properties[name] = prop
 		}
 		if len(properties) > 0 {
