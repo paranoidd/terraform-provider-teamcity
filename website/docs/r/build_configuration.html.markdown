@@ -69,7 +69,7 @@ EOF
 
   attached_vcs_root {
     vcs_root       = "Root_DefaultVcs"
-    checkout_rules = "+:refs/heads/master\n+:refs/heads/develop"
+    checkout_rules = "+:. => .repo"
   }
 }
 ```

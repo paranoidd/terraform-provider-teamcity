@@ -34,6 +34,10 @@ func resourceParameter() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
+			"read_only": &schema.Schema{
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
 			// Checkbox type options
 			"checked_value": &schema.Schema{
 				Type:     schema.TypeString,
@@ -94,6 +98,11 @@ func parametersToDefinition(parameters types.Parameters) *schema.Set {
 			param["label"] = spec.Label
 			param["description"] = spec.Description
 
+			// log.Printf("Reading project resource %q", d.Id())
+			if spec.ReadOnly {
+				param["readOnly"] = spec.ReadOnly
+			}
+
 			typeName := spec.Type.TypeName()
 			param["type"] = typeName
 			if typeName == "text" {
@@ -124,6 +133,7 @@ func parameterValues(parameters types.Parameters) map[string]interface{} {
 func definitionToParameterSpec(param map[string]interface{}) *types.ParameterSpec {
 	if param["type"].(string) != "" || param["label"].(string) != "" || param["description"].(string) != "" {
 		var tp types.ParameterType
+		var ro types.ReadOnly
 		if param["type"].(string) == "text" {
 			tp = &types.TextType{
 				ValidationMode: param["validation_mode"].(string),
@@ -143,9 +153,19 @@ func definitionToParameterSpec(param map[string]interface{}) *types.ParameterSpe
 		} else {
 			tp = &types.TextType{"any"}
 		}
+
+		if param["read_only"] != nil {
+			if param["read_only"] == true {
+				ro = types.ReadOnly(true)
+			} else {
+				ro = types.ReadOnly(false)
+			}
+
+		}
 		ret := &types.ParameterSpec{
 			Label:       param["label"].(string),
 			Description: param["description"].(string),
+			ReadOnly:    ro,
 			Type:        tp,
 		}
 		log.Printf("Parameter %s => %q", param["name"].(string), ret)
