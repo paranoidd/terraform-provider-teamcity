@@ -976,11 +976,18 @@ func resourceBuildConfigurationUpdateInternal(d *schema.ResourceData, meta inter
 		}
 
 		o, n := d.GetChange("parameter")
-		parameters := definitionToParameters(*n.(*schema.Set))
-		old := definitionToParameters(*o.(*schema.Set))
+		ops := o.(*schema.Set).Difference(n.(*schema.Set))
+		nps := n.(*schema.Set).Difference(o.(*schema.Set))
+
+		// log.Printf("Removing Parameters: %q", ops)
+		// log.Printf("Replacing Parameters: %q", nps)
+
+		parameters := definitionToParameters(*nps)
+		old := definitionToParameters(*ops)
 		replace_parameters := make(types.Parameters)
 		delete_parameters := old
 		for name, parameter := range parameters {
+
 			if project_parameter, ok := project_parameters[name]; ok && project_parameter.Spec != nil {
 				return fmt.Errorf("Can't redefine project parameter %s", name)
 			}
@@ -990,22 +997,8 @@ func resourceBuildConfigurationUpdateInternal(d *schema.ResourceData, meta inter
 			if !reflect.DeepEqual(parameter, old[name]) {
 				replace_parameters[name] = parameter
 			}
+			// This should never occur
 			delete(delete_parameters, name)
-		}
-		for name, v := range d.Get("parameter_values").(map[string]interface{}) {
-			value := v.(string)
-			parameter, ok := parameters[name]
-			if !ok {
-				if parameter, ok = project_parameters[name]; !ok {
-					if parameter, ok = template_parameters[name]; !ok {
-						parameter = types.Parameter{
-							Value: value,
-						}
-					}
-				}
-			}
-			parameter.Value = value
-			replace_parameters[name] = parameter
 		}
 		for name, _ := range delete_parameters {
 			if err := client.DeleteBuildConfigurationParameter(id, name); err != nil {
@@ -1020,8 +1013,35 @@ func resourceBuildConfigurationUpdateInternal(d *schema.ResourceData, meta inter
 				return err
 			}
 		}
-		d.SetPartial("parameter_values")
 		d.SetPartial("parameter")
+	}
+
+	if d.HasChange("parameter_values") {
+		o, n := d.GetChange("parameter_values")
+		opv := o.(map[string]interface{})
+		npv := n.(map[string]interface{})
+
+		remove, replace := diffTypeMap(typeMapFromSchema(opv), typeMapFromSchema(npv))
+
+		// log.Printf("[DEBUG] Removing Parameter_Values: %v", remove)
+		// log.Printf("[DEBUG] Replacing Paramter_Values: %v", replace)
+
+		for name, value := range remove {
+			log.Printf("[DEBUG] Removing Parameter Value: '%s' => '%s'", name, value)
+			if err := client.DeleteBuildConfigurationParameter(id, name); err != nil {
+				return err
+			}
+
+		}
+
+		for name, value := range replace {
+			log.Printf("[DEBUG] Replacing Parameter Value: '%s' => '%s'", name, value)
+			if err := client.ReplaceBuildConfigurationParameterValue(id, name, value); err != nil {
+				return err
+			}
+		}
+
+		d.SetPartial("parameter_values")
 	}
 
 	if d.HasChange("attached_vcs_root") {
@@ -1119,4 +1139,23 @@ func attachedVcsRootKeyHash(v interface{}) int {
 	hk := m["vcs_root"].(string)
 	log.Printf("[DEBUG] TeamCity attachedVcsRootKeyHash(%#v): %s: hk=%s,hc=%d", v, hk, hk, hashcode.String(hk))
 	return hashcode.String(hk)
+}
+
+func diffTypeMap(oldMap, newMap map[string]string) (map[string]string, map[string]string) {
+	for k, old := range oldMap {
+		new, ok := newMap[k]
+		if ok && old == new {
+			delete(oldMap, k)
+			delete(newMap, k)
+		}
+	}
+	return oldMap, newMap
+}
+
+func typeMapFromSchema(m map[string]interface{}) map[string]string {
+	result := make(map[string]string, len(m))
+	for k, v := range m {
+		result[k] = v.(string)
+	}
+	return result
 }
