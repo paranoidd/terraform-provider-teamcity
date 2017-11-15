@@ -17,6 +17,11 @@ resource "teamcity_build_configuration" "default" {
   project = "DefaultProject"
   name    = "default-build-configuration"
 
+  setting {
+     name  = "artifactRules"
+     value = "+:dist/release.tar.gz => dist/"
+  }
+
   parameter {
     name = "env.TEAMCITY_PASSWORD"
     type = "password"
@@ -77,6 +82,9 @@ The following arguments are supported:
 * `project` - (Optional) ID of the Project the Build Configuration resides within.
     Defaults to `_Root`
 * `description` - (Optional) Description of the Build Configuration.
+* `setting` - (Optional) Build setting/s defined for the Build Configuration.
+    - `name` - (Required) Name of the Setting.
+    - `value` - (Optional) The Value of the Setting.
 * `template` - (Optional) template ID for the Build Configuration.
 * `parameter` - (Optional) parameter/s defined for the Build Configuration.
 * `parameter_values` - (Optional) parameter value/s defined for the Build Configuration.
@@ -111,6 +119,7 @@ The following attributes are exported:
 * `name` - The name of the Build Configuration.
 * `project` - ID of the Project the Build Configuration resides within.
 * `description` - Description of the Build Configuration.
+* `setting` - (If Defined) Build setting/s defined for the Build Configuration.
 * `template` - (If Defined) template ID for the Build Configuration.
 * `parameter` - (If Defined) parameter/s defined for the Build Configuration.
 * `parameter_values` - (If Defined) parameter value/s defined for the Build Configuration.
