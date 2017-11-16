@@ -15,6 +15,16 @@ resource "teamcity_build_configuration" "default" {
   project = "${teamcity_project.default.id}"
   name    = "default-build-configuration"
 
+  parameter {
+    allow_multiple = "false"
+    name           = "secure-string"
+    type           = "password"
+  }
+
+  parameter_values {
+    foo = "bar"
+  }
+
   step {
     type = "simpleRunner"
     name = "second"
