@@ -37,6 +37,7 @@ func resourceParameter() *schema.Resource {
 			"read_only": &schema.Schema{
 				Type:     schema.TypeBool,
 				Optional: true,
+				Default:  false,
 			},
 			// Checkbox type options
 			"checked_value": &schema.Schema{
