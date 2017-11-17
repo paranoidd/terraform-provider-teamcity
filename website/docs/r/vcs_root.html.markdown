@@ -51,5 +51,5 @@ The following attributes are exported:
 VCS Roots can be imported using the `id`, e.g.
 
 ```
-$ terraform import teamcity_vcs_root.foobar Root_DefaultVcs
+$ terraform import teamcity_vcs_root.default Root_DefaultVcs
 ```

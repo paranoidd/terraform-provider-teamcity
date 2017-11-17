@@ -33,7 +33,7 @@ provider "teamcity" {
 Compatibility is defined by [teamcity-go-sdk](https://github.com/Cardfree/teamcity-go-sdk) which bundled with this provider.
 
 -	[Terraform](https://www.terraform.io/downloads.html) 0.10.x
--	[Go](https://golang.org/doc/install) 1.8 (to build the provider plugin)
+-	[Go](https://golang.org/doc/install) 1.9 (to build the provider plugin)
 -	[Teamcity](https://www.jetbrains.com/teamcity/)) 9.x - latest
 
 

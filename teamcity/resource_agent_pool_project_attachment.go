@@ -1,22 +1,19 @@
 package teamcity
 
 import (
-	// "fmt"
-	"github.com/hashicorp/terraform/helper/schema"
-
 	"github.com/Cardfree/teamcity-sdk-go/teamcity"
 	"github.com/Cardfree/teamcity-sdk-go/types"
+	"github.com/hashicorp/terraform/helper/schema"
+
+	"fmt"
 	"log"
 )
 
-func resourceAgentPoolAttachment() *schema.Resource {
+func resourceAgentPoolProjectAttachment() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceAgentPoolAttachementCreate,
-		Read:   resourceAgentPoolAttachementRead,
-		Delete: resourceAgentPoolAttachementDelete,
-		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
-		},
+		Create: resourceAgentPoolProjectAttachementCreate,
+		Read:   resourceAgentPoolProjectAttachementRead,
+		Delete: resourceAgentPoolProjectAttachementDelete,
 
 		Schema: map[string]*schema.Schema{
 			"pool": &schema.Schema{
@@ -33,7 +30,7 @@ func resourceAgentPoolAttachment() *schema.Resource {
 	}
 }
 
-func resourceAgentPoolAttachementCreate(d *schema.ResourceData, meta interface{}) error {
+func resourceAgentPoolProjectAttachementCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*teamcity.Client)
 
 	attachmentPool := d.Get("pool").(string)
@@ -42,19 +39,24 @@ func resourceAgentPoolAttachementCreate(d *schema.ResourceData, meta interface{}
 	attachment := types.AgentPoolAttachment{
 		ProjectID: attachmentProject,
 	}
-	err := client.CreateAgentPoolAttachment(attachmentPool, &attachment)
-	if err != nil {
-		return err
+
+	pool, pool_err := client.GetAgentPool(d.Get("pool").(string))
+	if pool_err != nil {
+		return pool_err
 	}
 
-	// THIS ID NEEDS TO BE CHANGED TO SOMETHING COMBINING POOL AND PROJECT
-	// id := attachment.ID
-	d.SetId(attachmentProject)
+	create_err := client.CreateAgentPoolProjectAttachment(attachmentPool, &attachment)
+	if create_err != nil {
+		return create_err
+	}
+
+	id := fmt.Sprintf("%d_%s", pool.ID, attachment.ProjectID)
+	d.SetId(id)
 	return nil
 }
 
-func resourceAgentPoolAttachementRead(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("Reading agent_attachment resource %q", d.Id())
+func resourceAgentPoolProjectAttachementRead(d *schema.ResourceData, meta interface{}) error {
+	log.Printf("Reading agent_pool_project_attachment resource %q", d.Id())
 	client := meta.(*teamcity.Client)
 	pool, err := client.GetAgentPool(d.Get("pool").(string))
 	if err != nil {
@@ -75,8 +77,8 @@ func resourceAgentPoolAttachementRead(d *schema.ResourceData, meta interface{}) 
 	return nil
 }
 
-func resourceAgentPoolAttachementDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceAgentPoolProjectAttachementDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*teamcity.Client)
-	return client.DeleteAgentPoolAttachement(d.Get("name").(string), d.Get("pool").(string))
-	// return nil
+	err := client.DeleteAgentPoolProjectAttachement(d.Get("pool").(string), d.Get("project").(string))
+	return err
 }
