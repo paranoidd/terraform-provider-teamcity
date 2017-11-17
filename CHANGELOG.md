@@ -4,7 +4,7 @@ BACKWARDS INCOMPATIBILITIES / NOTES:
 
 FEATURES:
 
-- **Resource:**  `agent_pool_attachement` ([#6](https://github.com/Cardfree/terraform-provider-teamcity/pull/6]))
+- **Resource:**  `agent_pool_project_attachment` ([#10](https://github.com/Cardfree/terraform-provider-teamcity/pull/10]))
 
 IMPROVEMENTS:
 
