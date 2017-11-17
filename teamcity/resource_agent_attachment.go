@@ -54,7 +54,7 @@ func resourceAgentPoolAttachementCreate(d *schema.ResourceData, meta interface{}
 }
 
 func resourceAgentPoolAttachementRead(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("Reading agent_pool_attachment resource %q", d.Id())
+	log.Printf("Reading agent_attachment resource %q", d.Id())
 	client := meta.(*teamcity.Client)
 	pool, err := client.GetAgentPool(d.Get("pool").(string))
 	if err != nil {

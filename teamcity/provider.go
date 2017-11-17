@@ -44,11 +44,11 @@ func Provider() terraform.ResourceProvider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"teamcity_project":               resourceProject(),
-			"teamcity_agent_pool_attachment": resourceAgentPoolAttachment(),
-			"teamcity_vcs_root":              resourceVcsRoot(),
-			"teamcity_build_configuration":   resourceBuildConfiguration(),
-			"teamcity_build_template":        resourceBuildTemplate(),
+			"teamcity_project":             resourceProject(),
+			"teamcity_pool_attachment":     resourceAgentPoolAttachment(),
+			"teamcity_vcs_root":            resourceVcsRoot(),
+			"teamcity_build_configuration": resourceBuildConfiguration(),
+			"teamcity_build_template":      resourceBuildTemplate(),
 		},
 		ConfigureFunc: providerConfigure,
 	}
