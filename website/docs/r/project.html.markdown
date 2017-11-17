@@ -64,5 +64,5 @@ The following attributes are exported:
 Projects can be imported using the `id`, e.g.
 
 ```
-$ terraform import teamcity_project.foobar DefaultProject
+$ terraform import teamcity_project.default DefaultProject
 ```

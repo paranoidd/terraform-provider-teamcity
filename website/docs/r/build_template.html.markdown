@@ -112,5 +112,5 @@ resource "teamcity_build_configuration" "example" {
 Build Templates can be imported using the `id`, e.g.
 
 ```
-$ terraform import teamcity_build_template.foobar Root_DefaultBuildTemplate
+$ terraform import teamcity_build_template.default Root_DefaultBuildTemplate
 ```

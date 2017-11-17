@@ -35,3 +35,8 @@ resource "teamcity_build_configuration" "default" {
     }
   }
 }
+
+resource "teamcity_agent_pool_attachment" "foo" {
+  pool    = "123"
+  project = "${teamcity_project.default.id}"
+}

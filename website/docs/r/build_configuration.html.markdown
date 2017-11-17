@@ -136,5 +136,5 @@ The following attributes are exported:
 Build Configurations can be imported using the `id`, e.g.
 
 ```
-$ terraform import teamcity_build_configuration.foobar Root_DefaultBuildConfiguration
+$ terraform import teamcity_build_configuration.default Root_DefaultBuildConfiguration
 ```

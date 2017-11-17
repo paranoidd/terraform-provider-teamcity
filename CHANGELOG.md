@@ -4,6 +4,8 @@ BACKWARDS INCOMPATIBILITIES / NOTES:
 
 FEATURES:
 
+- **Resource:**  `agent_pool_project_attachment` ([#10](https://github.com/Cardfree/terraform-provider-teamcity/pull/10]))
+
 IMPROVEMENTS:
 
 - **Resource:**  `build_configuration` and `build_template` Now support Settings ([#6](https://github.com/Cardfree/terraform-provider-teamcity/pull/6]))
