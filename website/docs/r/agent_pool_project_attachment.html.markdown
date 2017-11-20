@@ -15,8 +15,12 @@ Project/s can be attached to multiple Agent Pools.
 ## Example Usage
 
 ```hcl
+data "teamcity_agent_pool" "default" {
+  name    = "Default"
+}
+
 resource "teamcity_agent_pool_project_attachment" "default" {
-  pool    = "Default"
+  pool    = "${data.teamcity_agent_pool.default.id}"
   project = "${teamcity_project.default.id}"
 }
 ```
@@ -25,8 +29,8 @@ resource "teamcity_agent_pool_project_attachment" "default" {
 
 The following arguments are supported:
 
-* `pool` - (Required) Name of the Agent Pool.
-* `project` - (Required) The ID of the Project to Attach.
+* `pool` - (Required) ID of the Agent Pool.
+* `project` - (Required) ID of the Project to Attach.
 
 
 ## Attributes Reference
@@ -34,6 +38,6 @@ The following arguments are supported:
 The following attributes are exported:
 
 * `id` - The Combination of Pool ID and Project ID
-* `pool` - (Required) Name of the Agent Pool.
-* `project` - (Required) The ID of the Project to Attach.
+* `pool` -  The ID of the Agent Pool.
+* `project` - The ID of the Project to Attach.
 

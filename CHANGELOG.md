@@ -2,11 +2,16 @@
 
 BACKWARDS INCOMPATIBILITIES / NOTES:
 
+- `agent_pool_project_attachemnt` `pool` now uses ID of the agent pool not Name. Please use the new Datasource to lookup the agent id.
+
 FEATURES:
 
-IMPROVEMENTS:
+- **Datasource:**  `agent_pool` ([#11](https://github.com/Cardfree/terraform-provider-teamcity/pull/11]))
 
-BUG FIXES:
+BUG FIXES / IMPROVEMENTS:
+
+- **Resource:**  `agent_pool_project_attachment` ([#10](https://github.com/Cardfree/terraform-provider-teamcity/pull/10]))
+  - Now uses id for `pool` not name
 
 
 ## 0.1.1 (November 17, 2017)

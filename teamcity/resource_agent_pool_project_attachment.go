@@ -17,7 +17,7 @@ func resourceAgentPoolProjectAttachment() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"pool": &schema.Schema{
-				Type:     schema.TypeString,
+				Type:     schema.TypeInt,
 				Required: true,
 				ForceNew: true,
 			},
@@ -33,16 +33,11 @@ func resourceAgentPoolProjectAttachment() *schema.Resource {
 func resourceAgentPoolProjectAttachementCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*teamcity.Client)
 
-	attachmentPool := d.Get("pool").(string)
+	attachmentPool := d.Get("pool").(int)
 	attachmentProject := d.Get("project").(string)
 
 	attachment := types.AgentPoolAttachment{
 		ProjectID: attachmentProject,
-	}
-
-	pool, pool_err := client.GetAgentPool(d.Get("pool").(string))
-	if pool_err != nil {
-		return pool_err
 	}
 
 	create_err := client.CreateAgentPoolProjectAttachment(attachmentPool, &attachment)
@@ -50,7 +45,7 @@ func resourceAgentPoolProjectAttachementCreate(d *schema.ResourceData, meta inte
 		return create_err
 	}
 
-	id := fmt.Sprintf("%d_%s", pool.ID, attachment.ProjectID)
+	id := fmt.Sprintf("%d_%s", attachmentPool, attachment.ProjectID)
 	d.SetId(id)
 	return nil
 }
@@ -58,7 +53,7 @@ func resourceAgentPoolProjectAttachementCreate(d *schema.ResourceData, meta inte
 func resourceAgentPoolProjectAttachementRead(d *schema.ResourceData, meta interface{}) error {
 	log.Printf("Reading agent_pool_project_attachment resource %q", d.Id())
 	client := meta.(*teamcity.Client)
-	pool, err := client.GetAgentPool(d.Get("pool").(string))
+	pool, err := client.GetAgentPoolById(d.Get("pool").(int))
 	if err != nil {
 		return err
 	}
@@ -79,6 +74,6 @@ func resourceAgentPoolProjectAttachementRead(d *schema.ResourceData, meta interf
 
 func resourceAgentPoolProjectAttachementDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*teamcity.Client)
-	err := client.DeleteAgentPoolProjectAttachement(d.Get("pool").(string), d.Get("project").(string))
+	err := client.DeleteAgentPoolProjectAttachement(d.Get("pool").(int), d.Get("project").(string))
 	return err
 }

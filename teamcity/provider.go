@@ -43,6 +43,9 @@ func Provider() terraform.ResourceProvider {
 				Description: descriptions["skip_credentials_validation"],
 			},
 		},
+		DataSourcesMap: map[string]*schema.Resource{
+			"teamcity_agent_pool": dataSourceAgentPool(),
+		},
 		ResourcesMap: map[string]*schema.Resource{
 			"teamcity_project":                       resourceProject(),
 			"teamcity_agent_pool_project_attachment": resourceAgentPoolProjectAttachment(),
