@@ -13,11 +13,14 @@ Documentation
 -------------
 
 - [Teamcity Provider](website/docs/index.html.markdown)
-- Resources
-  - [project](website/docs/r/project.html.markdown)
-  - [vcs_root](website/docs/r/vcs_root.html.markdown)
-  - [build_configuration](website/docs/r/build_configuration.html.markdown)
-  - [build_template](website/docs/r/build_template.html.markdown)
+  - Datasources
+    - [agent_pool](website/docs/d/agent_pool.html.markdown)
+  - Resources
+    - [agent_pool_project_attachment](website/docs/r/agent_pool_project_attachment.html.markdown)
+    - [project](website/docs/r/project.html.markdown)
+    - [vcs_root](website/docs/r/vcs_root.html.markdown)
+    - [build_configuration](website/docs/r/build_configuration.html.markdown)
+    - [build_template](website/docs/r/build_template.html.markdown)
 
 
 ## Installing the Provider
