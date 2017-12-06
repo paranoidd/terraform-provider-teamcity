@@ -34,6 +34,7 @@ resource "teamcity_build_configuration" "default" {
     validation_mode = "not_empty"
     label           = "Test framework"
     description     = "Name of the test framework to use"
+    display         = "prompt"
     allow_multiple  = false
   }
 
