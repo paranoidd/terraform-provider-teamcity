@@ -140,7 +140,6 @@ func parameterValues(parameters types.Parameters) map[string]interface{} {
 func definitionToParameterSpec(param map[string]interface{}) *types.ParameterSpec {
 	if param["type"].(string) != "" || param["label"].(string) != "" || param["description"].(string) != "" {
 		var di types.Display
-		// var di string
 		var tp types.ParameterType
 		var ro types.ReadOnly
 		if param["type"].(string) == "text" {
