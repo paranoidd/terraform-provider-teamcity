@@ -11,7 +11,7 @@ BUG FIXES:
 ## 0.1.3 (December 6, 2017)
 
 IMPROVEMENTS:
-- **Resource:**  `parameter` Now Supports display types ([#11](https://github.com/Cardfree/terraform-provider-teamcity/pull/11]))
+- **Resource:**  `parameter` Now Supports display types ([#12](https://github.com/Cardfree/terraform-provider-teamcity/pull/12]))
 
 ## 0.1.2 (November 20, 2017)
 
