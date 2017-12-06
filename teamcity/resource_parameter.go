@@ -2,6 +2,7 @@ package teamcity
 
 import (
 	"fmt"
+
 	"github.com/hashicorp/terraform/helper/hashcode"
 	"github.com/hashicorp/terraform/helper/schema"
 
@@ -26,6 +27,10 @@ func resourceParameter() *schema.Resource {
 				Optional: true,
 			},
 			"description": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"display": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 			},
@@ -98,6 +103,7 @@ func parametersToDefinition(parameters types.Parameters) *schema.Set {
 			spec := *parameter.Spec
 			param["label"] = spec.Label
 			param["description"] = spec.Description
+			param["display"] = spec.Display
 
 			// log.Printf("Reading project resource %q", d.Id())
 			if spec.ReadOnly {
@@ -133,6 +139,8 @@ func parameterValues(parameters types.Parameters) map[string]interface{} {
 
 func definitionToParameterSpec(param map[string]interface{}) *types.ParameterSpec {
 	if param["type"].(string) != "" || param["label"].(string) != "" || param["description"].(string) != "" {
+		var di types.Display
+		// var di string
 		var tp types.ParameterType
 		var ro types.ReadOnly
 		if param["type"].(string) == "text" {
@@ -154,6 +162,18 @@ func definitionToParameterSpec(param map[string]interface{}) *types.ParameterSpe
 		} else {
 			tp = &types.TextType{"any"}
 		}
+		if param["display"] != "" {
+			if param["display"] == "prompt" {
+				di = types.Display(types.Prompt)
+
+			} else if param["display"] == "hidden" {
+				di = types.Display(types.Hidden)
+			} else {
+				di = types.Display(types.Normal)
+			}
+		} else {
+			di = types.Display(types.Normal)
+		}
 
 		if param["read_only"] != nil {
 			if param["read_only"] == true {
@@ -166,6 +186,7 @@ func definitionToParameterSpec(param map[string]interface{}) *types.ParameterSpe
 		ret := &types.ParameterSpec{
 			Label:       param["label"].(string),
 			Description: param["description"].(string),
+			Display:     di,
 			ReadOnly:    ro,
 			Type:        tp,
 		}

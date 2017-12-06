@@ -1,4 +1,4 @@
-## 0.1.3 (Unreleased)
+## 0.1.4 (Unreleased)
 
 BACKWARDS INCOMPATIBILITIES / NOTES:
 
@@ -8,6 +8,10 @@ IMPROVEMENTS:
 
 BUG FIXES:
 
+## 0.1.3 (December 6, 2017)
+
+IMPROVEMENTS:
+- **Resource:**  `parameter` Now Supports display types ([#11](https://github.com/Cardfree/terraform-provider-teamcity/pull/11]))
 
 ## 0.1.2 (November 20, 2017)
 
