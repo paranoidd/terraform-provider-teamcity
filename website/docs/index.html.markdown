@@ -21,9 +21,10 @@ Use the navigation to the left to read about the available resources.
 ```hcl
 // Configure the Teamcity provider
 provider "teamcity" {
-  // url      = "${var.teamcity_url}"
-  // username = "${var.teamcity_username}"
-  // password = "${var.teamcity_password}"
+  // url         = "${var.teamcity_url}"
+  // api_version = "${var.teamcity_api_version}"
+  // username    = "${var.teamcity_username}"
+  // password    = "${var.teamcity_password}"
 }
 ```
 
@@ -44,6 +45,10 @@ The following arguments are supported in the `provider` block:
 * `url` - (optional) This is the Teamcity Server URL e.g. https://teamcity.domain.com:8111.
   It must be provided but it can also be sourced from the `TEAMCITY_URL` environment variable.
   Defaults to `http://localhost:8111`
+
+* `api_version` - (optional) This is the Teamcity Server REST API Version e.g. `latest`.
+  It must be provided but it can also be sourced from the `TEAMCITY_API_VERSION` environment variable.
+  Defaults to `10.0`
 
 * `username` - (Optional) This is the Teamcity username. It must be provided, but
   it can also be sourced from the `TEAMCITY_USERNAME` environment variable.
