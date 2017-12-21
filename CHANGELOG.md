@@ -1,4 +1,4 @@
-## 0.1.4 (Unreleased)
+## 0.1.5 (Unreleased)
 
 BACKWARDS INCOMPATIBILITIES / NOTES:
 
@@ -7,6 +7,18 @@ FEATURES:
 IMPROVEMENTS:
 
 BUG FIXES:
+
+## 0.1.4 (December 21, 2017)
+
+BACKWARDS INCOMPATIBILITIES / NOTES:
+
+- `api_version` is set to `10.0` if your using a version different then `10.0` or below please set the `api_version` in the provider to your supported version.
+- Currently Multiple Templates attached to a single Build Configuration is not supported.
+
+FEATURES:
+
+BUG FIXES / IMPROVEMENTS:
+- API has been pinned to `10.0` because of build template api changes ([#16](https://github.com/Cardfree/terraform-provider-teamcity/issues/16))
 
 ## 0.1.3 (December 6, 2017)
 
