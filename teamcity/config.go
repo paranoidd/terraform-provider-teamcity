@@ -2,6 +2,7 @@ package teamcity
 
 import (
 	"errors"
+
 	"github.com/Cardfree/teamcity-sdk-go/teamcity"
 	// "os"
 )
@@ -10,6 +11,7 @@ type Config struct {
 	User                string
 	Password            string
 	URL                 string
+	Version             string
 	Insecure            bool
 	SkipCredsValidation bool
 }
@@ -36,7 +38,11 @@ func (c *Config) Client() (interface{}, error) {
 		return nil, errors.New("Missing TeamCity URL and TEAMCITY_URL not defined")
 	}
 
-	client := teamcity.New(c.URL, c.User, c.Password)
+	if c.Version == "" {
+		return nil, errors.New("Missing TeamCity API Version and TEAMCITY_API_VERSION not defined")
+	}
+
+	client := teamcity.New(c.URL, c.User, c.Password, c.Version)
 
 	if !c.SkipCredsValidation {
 		err := c.ValidateCredentials(client)

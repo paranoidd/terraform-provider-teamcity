@@ -29,6 +29,13 @@ func Provider() terraform.ResourceProvider {
 				Description: descriptions["url"],
 			},
 
+			"api_version": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("TEAMCITY_API_VERSION", "10.0"),
+				Description: descriptions["api_version"],
+			},
+
 			"insecure": {
 				Type:        schema.TypeBool,
 				Optional:    true,
@@ -70,6 +77,9 @@ func init() {
 		"url": "URL of the TeamCity server to connect to. If not set, the default profile\n" +
 			"created with `aws configure` will be used.",
 
+		"api_version": "The API Version of the TeamCity server to connect to. If not set, the default\n" +
+			"provided by the sdk `latest` will be used.",
+
 		"insecure": "Explicitly allow the provider to perform \"insecure\" SSL requests. If omitted," +
 			"default value is `false`",
 	}
@@ -80,6 +90,7 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 		User:                d.Get("user").(string),
 		Password:            d.Get("password").(string),
 		URL:                 d.Get("url").(string),
+		Version:             d.Get("api_version").(string),
 		Insecure:            d.Get("insecure").(bool),
 		SkipCredsValidation: d.Get("skip_credentials_validation").(bool),
 	}
