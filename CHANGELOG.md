@@ -1,4 +1,4 @@
-## 0.1.5 (Unreleased)
+## 0.1.6 (Unreleased)
 
 BACKWARDS INCOMPATIBILITIES / NOTES:
 
@@ -7,6 +7,11 @@ FEATURES:
 IMPROVEMENTS:
 
 BUG FIXES:
+
+## 0.1.5 (January 16, 2018)
+
+BUG FIXES:
+- underlying go provider had a typo for buildTypes creation ([Seen Here](https://github.com/Cardfree/teamcity-sdk-go/commit/ce1da1a5348c3e788e980cea37b9b588a68c2036))
 
 ## 0.1.4 (December 21, 2017)
 

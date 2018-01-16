@@ -63,8 +63,8 @@ $ make testacc
 
 ### Development Resources on the Web
 
-[Perl5 Teamcity API](http://eilara.github.io/perl5-teamcity-api/)
-[Swagger](https://dploeger.github.io/teamcity-rest-api)
-[Jetbrains Tickets](https://youtrack.jetbrains.com/issues/TW)
-[Jetbrains Support](https://teamcity-support.jetbrains.com)
-[Java Docs for Teamcity](http://javadoc.jetbrains.net/teamcity)
+- [Perl5 Teamcity API](http://eilara.github.io/perl5-teamcity-api/)
+- [Swagger](https://dploeger.github.io/teamcity-rest-api)
+- [Jetbrains Tickets](https://youtrack.jetbrains.com/issues/TW)
+- [Jetbrains Support](https://teamcity-support.jetbrains.com)
+- [Java Docs for Teamcity](http://javadoc.jetbrains.net/teamcity)

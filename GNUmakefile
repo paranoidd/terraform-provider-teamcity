@@ -15,6 +15,7 @@ testacc: fmtcheck
 	TF_ACC=1 go test $(TEST) -v $(TESTARGS) -timeout 120m
 
 testtf: build
+	  cp $$GOPATH/bin/terraform-provider-teamcity ~/.terraform.d/plugins/terraform-provider-teamcity_v100.0.0
 	  terraform init
 	  terraform apply -auto-approve=false
           

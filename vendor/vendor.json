@@ -3,16 +3,16 @@
 	"ignore": "test",
 	"package": [
 		{
-			"checksumSHA1": "9WXxVFbt+6ZJkrDOrNU3TsjB9xw=",
+			"checksumSHA1": "iuSaoS0kkSWGkzDhuYfCAWysy/4=",
 			"path": "github.com/Cardfree/teamcity-sdk-go/teamcity",
-			"revision": "4cbdfead036ccd9bd9ee07f81f8da914c60b5a2d",
-			"revisionTime": "2017-12-21T19:37:28Z"
+			"revision": "ce1da1a5348c3e788e980cea37b9b588a68c2036",
+			"revisionTime": "2018-01-16T22:07:41Z"
 		},
 		{
 			"checksumSHA1": "yMNM635Mo2oFyGLGYGQKR3wr51I=",
 			"path": "github.com/Cardfree/teamcity-sdk-go/types",
-			"revision": "4cbdfead036ccd9bd9ee07f81f8da914c60b5a2d",
-			"revisionTime": "2017-12-21T19:37:28Z"
+			"revision": "ce1da1a5348c3e788e980cea37b9b588a68c2036",
+			"revisionTime": "2018-01-16T22:07:41Z"
 		},
 		{
 			"checksumSHA1": "7eAIWei337IlBYIfzA3HyOEV9WE=",
