@@ -1,14 +1,14 @@
 ---
 layout: "teamcity"
-page_title: "Teamcity: agent_pool_project_attachment"
+page_title: "TeamCity: agent_pool_project_attachment"
 sidebar_current: "docs-teamcity-resource-agent-pool-project-attachment"
 description: |-
-  Provides a Teamcity Agent Pool Project Attachment resource. 
+  Provides a TeamCity Agent Pool Project Attachment resource.
 ---
 
 # teamcity\_agent_pool_project_attachment
 
-Provides a Teamcity Agent Pool Project Attachment resource. 
+Provides a TeamCity Agent Pool Project Attachment resource.
 
 Project/s can be attached to multiple Agent Pools.
 

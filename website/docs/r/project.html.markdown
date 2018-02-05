@@ -1,14 +1,14 @@
 ---
 layout: "teamcity"
-page_title: "Teamcity: project"
+page_title: "TeamCity: project"
 sidebar_current: "docs-teamcity-resource-project"
 description: |-
-  Provides a Teamcity Project resource. 
+  Provides a TeamCity Project resource.
 ---
 
 # teamcity\_project
 
-Provides a Teamcity Project resource. 
+Provides a TeamCity Project resource.
 
 ## Example Usage
 
