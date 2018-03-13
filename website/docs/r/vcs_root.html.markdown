@@ -1,14 +1,14 @@
 ---
 layout: "teamcity"
-page_title: "Teamcity: vcs_root"
+page_title: "TeamCity: vcs_root"
 sidebar_current: "docs-teamcity-resource-vcs-root"
 description: |-
-  Provides a Teamcity VCS Root resource. 
+  Provides a TeamCity VCS Root resource.
 ---
 
 # teamcity\_vcs\_root
 
-Provides a Teamcity VCS Root resource. 
+Provides a TeamCity VCS Root resource.
 
 ## Example Usage
 

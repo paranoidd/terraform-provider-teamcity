@@ -1,14 +1,14 @@
 ---
 layout: "teamcity"
-page_title: "Teamcity: build_template"
+page_title: "TeamCity: build_template"
 sidebar_current: "docs-teamcity-resource-build-template"
 description: |-
-  Provides a Teamcity Build Template resource. 
+  Provides a TeamCity Build Template resource.
 ---
 
 # teamcity\_build\_template
 
-Provides a Teamcity Build Template resource. 
+Provides a TeamCity Build Template resource.
 
 ## Example Usage
 

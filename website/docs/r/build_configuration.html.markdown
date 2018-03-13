@@ -1,14 +1,14 @@
 ---
 layout: "teamcity"
-page_title: "Teamcity: build_configuration"
+page_title: "TeamCity: build_configuration"
 sidebar_current: "docs-teamcity-resource-build-configuration"
 description: |-
-  Provides a Teamcity Build Configuration resource. 
+  Provides a TeamCity Build Configuration resource.
 ---
 
 # teamcity\_build\_configuration
 
-Provides a Teamcity Build Configuration resource. 
+Provides a TeamCity Build Configuration resource.
 
 ## Example Usage
 

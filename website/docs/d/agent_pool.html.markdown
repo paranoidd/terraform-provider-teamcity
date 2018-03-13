@@ -1,14 +1,14 @@
 ---
 layout: "teamcity"
-page_title: "Teamcity: agent_pool"
+page_title: "TeamCity: agent_pool"
 sidebar_current: "docs-teamcity-datasource-agent-pool"
 description: |-
-  Provides details about a Teamcity Agent Pool.
+  Provides details about a TeamCity Agent Pool.
 ---
 
 # teamcity\_agent_pool
 
-Provides details about a Teamcity Agent Pool. 
+Provides details about a TeamCity Agent Pool.
 
 ## Example Usage
 
