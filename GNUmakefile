@@ -1,7 +1,9 @@
 TEST?=$$(go list ./... |grep -v 'vendor')
 GOFMT_FILES?=$$(find . -name '*.go' |grep -v vendor)
-VERSION=$$(cat VERSION)
-OS=$$(echo "$(go env GOHOSTOS)_$(go env GOHOSTARCH)")
+VERSION=$(shell cat VERSION)
+GOHOSTOS:=$(shell go env GOHOSTOS)
+GOHOSTARCH:=$(shell go env GOHOSTARCH)
+
 default: build
 
 build: fmtcheck
@@ -16,7 +18,7 @@ testacc: fmtcheck
 	TF_ACC=1 go test $(TEST) -v $(TESTARGS) -timeout 120m
 
 testtf:  build
-	  cp $$GOPATH/bin/terraform-provider-teamcity $$HOME/.terraform.d/plugins/$(OS)/terraform-provider-teamcity_v0.0.1
+	  cp $$GOPATH/bin/terraform-provider-teamcity $$HOME/.terraform.d/plugins/$(GOHOSTOS)_$(GOHOSTARCH)/terraform-provider-teamcity_v0.0.1
 	  terraform init
 	  terraform apply -auto-approve=false
           
@@ -54,7 +56,7 @@ test-compile:
 	go test -c $(TEST) $(TESTARGS)
 
 install: build
-	cp $$GOPATH/bin/terraform-provider-teamcity $$HOME/.terraform.d/plugins/$(OS)/terraform-provider-teamcity_v$(VERSION)
+	cp $$GOPATH/bin/terraform-provider-teamcity $$HOME/.terraform.d/plugins/$(GOHOSTOS)_$(GOHOSTARCH)/terraform-provider-teamcity_v$(VERSION)
 
 .PHONY: build test testacc vet fmt fmtcheck errcheck vendor vendor-status test-compile install
 
