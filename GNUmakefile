@@ -1,6 +1,7 @@
 TEST?=$$(go list ./... |grep -v 'vendor')
 GOFMT_FILES?=$$(find . -name '*.go' |grep -v vendor)
-
+VERSION=$$(cat VERSION)
+OS=$$(echo "$(go env GOHOSTOS)_$(go env GOHOSTARCH)")
 default: build
 
 build: fmtcheck
@@ -14,8 +15,8 @@ test: fmtcheck
 testacc: fmtcheck
 	TF_ACC=1 go test $(TEST) -v $(TESTARGS) -timeout 120m
 
-testtf: build
-	  cp $$GOPATH/bin/terraform-provider-teamcity ~/.terraform.d/plugins/terraform-provider-teamcity_v0.0.1
+testtf:  build
+	  cp $$GOPATH/bin/terraform-provider-teamcity $$HOME/.terraform.d/plugins/$(OS)/terraform-provider-teamcity_v0.0.1
 	  terraform init
 	  terraform apply -auto-approve=false
           
@@ -37,6 +38,10 @@ fmtcheck:
 errcheck:
 	@sh -c "'$(CURDIR)/scripts/errcheck.sh'"
 
+vendor:
+	govendor update github.com/Cardfree/teamcity-sdk-go/teamcity
+	govendor update github.com/Cardfree/teamcity-sdk-go/types
+
 vendor-status:
 	@govendor status
 
@@ -48,5 +53,8 @@ test-compile:
 	fi
 	go test -c $(TEST) $(TESTARGS)
 
-.PHONY: build test testacc vet fmt fmtcheck errcheck vendor-status test-compile
+install: build
+	cp $$GOPATH/bin/terraform-provider-teamcity $$HOME/.terraform.d/plugins/$(OS)/terraform-provider-teamcity_v$(VERSION)
+
+.PHONY: build test testacc vet fmt fmtcheck errcheck vendor vendor-status test-compile install
 

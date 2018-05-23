@@ -112,13 +112,11 @@ func resourceBuildConfiguration() *schema.Resource {
 			"project": &schema.Schema{
 				Type:         schema.TypeString,
 				Required:     true,
-				ForceNew:     true,
 				ValidateFunc: teamcity.ValidateID,
 			},
 			"name": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
-				ForceNew: true,
 			},
 			"description": &schema.Schema{
 				Type:     schema.TypeString,
@@ -935,7 +933,14 @@ func resourceBuildConfigurationUpdateInternal(d *schema.ResourceData, meta inter
 			d.SetPartial("template")
 		}
 	}
-
+	if d.HasChange("name") {
+		o, n := d.GetChange("name")
+		log.Printf("Updating Name '%s' => '%s'", o, n)
+		if err := client.ReplaceBuildConfigurationField(id, "name", n.(string)); err != nil {
+			return err
+		}
+		d.SetPartial("name")
+	}
 	if d.HasChange("setting") {
 		o, n := d.GetChange("setting")
 		for _, s := range o.([]interface{}) {
