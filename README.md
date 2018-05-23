@@ -12,7 +12,7 @@ Requirements
 Documentation
 -------------
 
-- [Teamcity Provider](website/docs/index.html.markdown)
+- [TeamCity Provider](website/docs/index.html.markdown)
   - Datasources
     - [agent_pool](website/docs/d/agent_pool.html.markdown)
   - Resources
@@ -55,7 +55,7 @@ $ make test
 In order to run the full suite of Acceptance tests, run `make testacc`.
 
 *Note:* Acceptance tests create real resources and require the Docker container to be running.
-  Currently we use [teamcity-dsk-go](https://github.com/Cardfree/teamcity-sdk-go) as the repository to start the Teamcity container
+  Currently we use [teamcity-dsk-go](https://github.com/Cardfree/teamcity-sdk-go) as the repository to start the TeamCity container
 
 ```sh
 $ make testacc
@@ -63,8 +63,8 @@ $ make testacc
 
 ### Development Resources on the Web
 
-- [Perl5 Teamcity API](http://eilara.github.io/perl5-teamcity-api/)
+- [Perl5 TeamCity API](http://eilara.github.io/perl5-teamcity-api/)
 - [Swagger](https://dploeger.github.io/teamcity-rest-api)
-- [Jetbrains Tickets](https://youtrack.jetbrains.com/issues/TW)
-- [Jetbrains Support](https://teamcity-support.jetbrains.com)
-- [Java Docs for Teamcity](http://javadoc.jetbrains.net/teamcity)
+- [JetBrains Tickets](https://youtrack.jetbrains.com/issues/TW)
+- [JetBrains Support](https://teamcity-support.jetbrains.com)
+- [Java Docs for TeamCity](http://javadoc.jetbrains.net/teamcity)
