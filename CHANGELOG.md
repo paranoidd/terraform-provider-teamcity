@@ -1,4 +1,4 @@
-## 0.1.6 (Unreleased)
+## 0.1.7 (Unreleased)
 
 BACKWARDS INCOMPATIBILITIES / NOTES:
 
@@ -7,6 +7,13 @@ FEATURES:
 IMPROVEMENTS:
 
 BUG FIXES:
+
+## 0.1.6
+IMPROVEMENTS:
+- Renaming of Teamcity Build Configuration without ForceNew
+
+BUG FIXES:
+- Build Configuration no longer forces a new resource on Name change.
 
 ## 0.1.5 (January 16, 2018)
 
