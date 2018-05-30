@@ -65,6 +65,7 @@ $ make testacc
 
 - [Perl5 TeamCity API](http://eilara.github.io/perl5-teamcity-api/)
 - [Swagger](https://dploeger.github.io/teamcity-rest-api)
+- [JetBrains REST-API (SVN)](http://svn.jetbrains.org/teamcity/plugins/rest-api/branches/)
 - [JetBrains Tickets](https://youtrack.jetbrains.com/issues/TW)
 - [JetBrains Support](https://teamcity-support.jetbrains.com)
-- [Java Docs for TeamCity](http://javadoc.jetbrains.net/teamcity)
+- [Java Docs for TeamCity](http://javadoc.jetbrains.net/teamcity/openapi/current/)
