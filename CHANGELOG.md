@@ -1,4 +1,4 @@
-## 0.1.7 (Unreleased)
+## 0.1.8 (Unreleased)
 
 BACKWARDS INCOMPATIBILITIES / NOTES:
 
@@ -8,7 +8,13 @@ IMPROVEMENTS:
 
 BUG FIXES:
 
+## 0.1.7 (September 4, 2018)
+
+BUG FIXES:
+- Suppress diff due to trailing line returns ([#22](https://github.com/Cardfree/terraform-provider-teamcity/issues/22))
+
 ## 0.1.6
+
 IMPROVEMENTS:
 - Renaming of Teamcity Build Configuration without ForceNew
 
