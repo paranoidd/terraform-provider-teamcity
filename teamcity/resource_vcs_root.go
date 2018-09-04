@@ -7,9 +7,10 @@ import (
 	"github.com/hashicorp/terraform/helper/schema"
 
 	// "errors"
+	"log"
+
 	"github.com/Cardfree/teamcity-sdk-go/teamcity"
 	"github.com/Cardfree/teamcity-sdk-go/types"
-	"log"
 	// "reflect"
 )
 
@@ -42,8 +43,9 @@ func resourceVcsRoot() *schema.Resource {
 				Default:  "jetbrains.git",
 			},
 			"properties": &schema.Schema{
-				Type:     schema.TypeMap,
-				Optional: true,
+				Type:             schema.TypeMap,
+				Optional:         true,
+				DiffSuppressFunc: optionalSuffixReturnSuppress,
 			},
 		},
 	}

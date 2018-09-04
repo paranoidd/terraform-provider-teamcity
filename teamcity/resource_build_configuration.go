@@ -26,8 +26,9 @@ func resourceBuildStep() *schema.Resource {
 				Optional: true,
 			},
 			"properties": &schema.Schema{
-				Type:     schema.TypeMap,
-				Optional: true,
+				Type:             schema.TypeMap,
+				Optional:         true,
+				DiffSuppressFunc: optionalSuffixReturnSuppress,
 			},
 		},
 	}
