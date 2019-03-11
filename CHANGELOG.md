@@ -1,4 +1,4 @@
-## 0.1.8 (Unreleased)
+## 0.1.9 (Unreleased)
 
 BACKWARDS INCOMPATIBILITIES / NOTES:
 
@@ -7,6 +7,11 @@ FEATURES:
 IMPROVEMENTS:
 
 BUG FIXES:
+
+## 0.1.8 (March 11, 2019)
+
+BUG FIXES:
+- - Renaming of Teamcity Project without ForceNew  ([#25](https://github.com/Cardfree/terraform-provider-teamcity/issues/25))
 
 ## 0.1.7 (September 4, 2018)
 
