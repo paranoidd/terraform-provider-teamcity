@@ -33,7 +33,6 @@ func resourceProject() *schema.Resource {
 			"name": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
-				ForceNew: true,
 			},
 			"description": &schema.Schema{
 				Type:     schema.TypeString,
@@ -192,6 +191,13 @@ func resourceProjectUpdate(d *schema.ResourceData, meta interface{}) error {
 
 	id := d.Id()
 	d.Partial(true)
+
+	if d.HasChange("name") {
+		if err := client.SetProjectField(d.Id(), "name", d.Get("name").(string)); err != nil {
+			return err
+		}
+		d.SetPartial("name")
+	}
 
 	if d.HasChange("description") {
 		if err := client.SetProjectDescription(d.Id(), d.Get("description").(string)); err != nil {
