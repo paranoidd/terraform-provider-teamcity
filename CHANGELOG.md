@@ -8,10 +8,10 @@ IMPROVEMENTS:
 
 BUG FIXES:
 
-## 0.1.8 (March 11, 2019)
+## 0.1.8 (March 12, 2019)
 
 BUG FIXES:
-- - Renaming of Teamcity Project without ForceNew  ([#25](https://github.com/Cardfree/terraform-provider-teamcity/issues/25))
+- Renaming of Teamcity Project without ForceNew  ([#25](https://github.com/Cardfree/terraform-provider-teamcity/issues/25))
 
 ## 0.1.7 (September 4, 2018)
 

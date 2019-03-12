@@ -56,7 +56,9 @@ test-compile:
 	go test -c $(TEST) $(TESTARGS)
 
 install: build
+	mkdir -p $$HOME/.terraform.d/plugins/$(GOHOSTOS)_$(GOHOSTARCH)
 	cp $$GOPATH/bin/terraform-provider-teamcity $$HOME/.terraform.d/plugins/$(GOHOSTOS)_$(GOHOSTARCH)/terraform-provider-teamcity_v$(VERSION)
+
 
 .PHONY: build test testacc vet fmt fmtcheck errcheck vendor vendor-status test-compile install
 
