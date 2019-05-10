@@ -40,6 +40,9 @@ fmtcheck:
 errcheck:
 	@sh -c "'$(CURDIR)/scripts/errcheck.sh'"
 
+release:
+	@sh -c "'$(CURDIR)/scripts/release.sh'"
+
 vendor:
 	govendor update github.com/Cardfree/teamcity-sdk-go/teamcity
 	govendor update github.com/Cardfree/teamcity-sdk-go/types
@@ -60,5 +63,5 @@ install: build
 	cp $$GOPATH/bin/terraform-provider-teamcity $$HOME/.terraform.d/plugins/$(GOHOSTOS)_$(GOHOSTARCH)/terraform-provider-teamcity_v$(VERSION)
 
 
-.PHONY: build test testacc vet fmt fmtcheck errcheck vendor vendor-status test-compile install
+.PHONY: build test testacc vet fmt fmtcheck errcheck release vendor vendor-status test-compile install
 
