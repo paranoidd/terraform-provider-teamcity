@@ -1,4 +1,4 @@
-## 0.1.9 (Unreleased)
+# 0.1.10 (Unreleased)
 
 BACKWARDS INCOMPATIBILITIES / NOTES:
 
@@ -7,6 +7,11 @@ FEATURES:
 IMPROVEMENTS:
 
 BUG FIXES:
+
+# 0.1.9 (May 24, 2019)
+IMPROVEMENTS:
+- Migrate from `govendor` to `go mod`
+- Add Support for Terraform `v0.12.0`
 
 ## 0.1.8 (March 12, 2019)
 
