@@ -1,7 +1,8 @@
 #!/bin/bash
-
 VERSION=$(cat VERSION)
+
 mkdir "bin/archives/"
+
 ARRAY=(
 # OS		# ARCH		# Archive	# Ext
 'darwin'	'amd64'		'tar.gz'	''
@@ -24,6 +25,8 @@ do
 
   mkdir -p "bin/${DIR}"
 
+  GOOS="${ARRAY[$(($i*4))]}" \
+  GOARCH="${ARRAY[$(($i*4+1))]}" \
   go build -o "bin/${DIR}/terraform-provider-teamcity_v${VERSION}${EXTENTION}"
 
   pushd "bin/$DIR"
@@ -38,6 +41,6 @@ done
 
 pushd "bin/archives"
   shasum -a 256 * > sha256sums.txt
-  hub release create $(echo $(echo * | xargs -n1 echo -a)) -m "v${VERSION}" "v${VERSION}"
+  hub release create $(echo * | xargs -n1 echo -a) -m "v${VERSION}" "v${VERSION}"
 popd
 

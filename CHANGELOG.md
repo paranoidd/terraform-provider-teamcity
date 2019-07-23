@@ -1,4 +1,4 @@
-# 0.1.10 (Unreleased)
+# 0.1.11 (Unreleased)
 
 BACKWARDS INCOMPATIBILITIES / NOTES:
 
@@ -7,6 +7,16 @@ FEATURES:
 IMPROVEMENTS:
 
 BUG FIXES:
+
+
+# 0.1.10 (June 23, 2019)
+
+IMPROVEMENTS:
+ - Upgrade to Current version of Master for teamcity-go-sdk
+ - Upgrade to Terraform v0.12.5 as refrence
+
+BUG FIXES:
+ - teamcity-go-sdk: Add 2 second API timeout
 
 # 0.1.9 (May 24, 2019)
 IMPROVEMENTS:
