@@ -232,7 +232,13 @@ func resourceProjectUpdate(d *schema.ResourceData, meta interface{}) error {
 			}
 			delete(delete_parameters, name)
 		}
-		for name, v := range d.Get("parameter_values").(map[string]interface{}) {
+
+		ov, nv := d.GetChange("parameter_values")
+		opv := ov.(map[string]interface{})
+		npv := nv.(map[string]interface{})
+		delete_parameter_values := opv
+
+		for name, v := range npv {
 			value := v.(string)
 			parameter, ok := parameters[name]
 			if !ok {
@@ -244,7 +250,16 @@ func resourceProjectUpdate(d *schema.ResourceData, meta interface{}) error {
 			}
 			parameter.Value = value
 			replace_parameters[name] = parameter
+			delete(delete_parameter_values, name)
 		}
+
+		for name, v := range delete_parameter_values {
+			param := types.Parameter{
+				Value: v.(string),
+			}
+			delete_parameters[name] = param
+		}
+
 		for name, _ := range delete_parameters {
 			if err := client.DeleteProjectParameter(id, name); err != nil {
 				return err
