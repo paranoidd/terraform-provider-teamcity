@@ -9,8 +9,8 @@ import (
 	// "errors"
 	"log"
 
-	"github.com/Cardfree/teamcity-sdk-go/teamcity"
-	"github.com/Cardfree/teamcity-sdk-go/types"
+	"github.com/paranoidd/teamcity-sdk-go/teamcity"
+	"github.com/paranoidd/teamcity-sdk-go/types"
 	// "reflect"
 )
 
@@ -30,7 +30,7 @@ func resourceVcsRoot() *schema.Resource {
 				Optional:     true,
 				Default:      "_Root",
 				ForceNew:     true,
-				ValidateFunc: teamcity.ValidateID,
+				ValidateFunc: teamcity.ValidateVcsRootID,
 			},
 			"name": &schema.Schema{
 				Type:     schema.TypeString,

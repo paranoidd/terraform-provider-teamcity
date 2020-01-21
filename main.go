@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/Cardfree/terraform-provider-teamcity/teamcity"
 	"github.com/hashicorp/terraform/plugin"
+	"github.com/paranoidd/terraform-provider-teamcity/teamcity"
 )
 
 func main() {

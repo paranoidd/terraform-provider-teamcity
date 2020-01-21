@@ -1,11 +1,10 @@
-module github.com/Cardfree/terraform-provider-teamcity
+module github.com/paranoidd/terraform-provider-teamcity
 
 go 1.12
 
-// replace github.com/Cardfree/teamcity-sdk-go => ../teamcity-sdk-go
-
 require (
-	github.com/Cardfree/teamcity-sdk-go v0.0.0-20190723173812-0e6d15147e9f
+	github.com/paranoidd/terraform-provider-teamcity v0.1.10
 	github.com/davecgh/go-spew v1.1.1
 	github.com/hashicorp/terraform v0.12.5
+	github.com/paranoidd/teamcity-sdk-go v0.0.1
 )

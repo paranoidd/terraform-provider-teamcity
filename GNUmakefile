@@ -21,7 +21,7 @@ testtf:  build
 	  cp $$GOPATH/bin/terraform-provider-teamcity $$HOME/.terraform.d/plugins/$(GOHOSTOS)_$(GOHOSTARCH)/terraform-provider-teamcity_v0.0.1
 	  terraform init
 	  terraform apply -auto-approve=false
-          
+
 vet:
 	@echo "go vet ."
 	@go vet $$(go list ./... | grep -v vendor/) ; if [ $$? -eq 1 ]; then \
@@ -44,8 +44,8 @@ release:
 	@sh -c "'$(CURDIR)/scripts/release.sh'"
 
 vendor:
-	govendor update github.com/Cardfree/teamcity-sdk-go/teamcity
-	govendor update github.com/Cardfree/teamcity-sdk-go/types
+	govendor update github.com/paranoidd/teamcity-sdk-go/teamcity
+	govendor update github.com/paranoidd/teamcity-sdk-go/types
 
 vendor-status:
 	@govendor status

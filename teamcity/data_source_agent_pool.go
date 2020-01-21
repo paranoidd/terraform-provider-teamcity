@@ -1,8 +1,8 @@
 package teamcity
 
 import (
-	"github.com/Cardfree/teamcity-sdk-go/teamcity"
 	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/paranoidd/teamcity-sdk-go/teamcity"
 
 	"fmt"
 )

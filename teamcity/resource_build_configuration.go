@@ -7,8 +7,8 @@ import (
 	"github.com/hashicorp/terraform/helper/hashcode"
 	"github.com/hashicorp/terraform/helper/schema"
 
-	"github.com/Cardfree/teamcity-sdk-go/teamcity"
-	"github.com/Cardfree/teamcity-sdk-go/types"
+	"github.com/paranoidd/teamcity-sdk-go/teamcity"
+	"github.com/paranoidd/teamcity-sdk-go/types"
 
 	"log"
 	"reflect"
@@ -89,7 +89,7 @@ func resourceAttachedVcsRoot() *schema.Resource {
 			"vcs_root": &schema.Schema{
 				Type:         schema.TypeString,
 				Required:     true,
-				ValidateFunc: teamcity.ValidateID,
+				ValidateFunc: teamcity.ValidateVcsRootID,
 			},
 			"checkout_rules": &schema.Schema{
 				Type:     schema.TypeString,
