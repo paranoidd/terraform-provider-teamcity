@@ -12,10 +12,6 @@ github.com/Azure/azure-sdk-for-go v21.3.0+incompatible/go.mod h1:9XXNKU+eRnpl9mo
 github.com/Azure/go-autorest v10.15.4+incompatible/go.mod h1:r+4oMnoxhatjLLJ6zxSWATqVooLgysK6ZNox3g/xq24=
 github.com/Azure/go-ntlmssp v0.0.0-20180810175552-4a21cbd618b4/go.mod h1:chxPXzSsl7ZWRAuOIE23GDNzjWuZquvFlgA8xmpunjU=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/paranoidd/teamcity-sdk-go v0.0.0-20190723173812-0e6d15147e9f h1:AVztfKsoabMVIIxWHLDbiq+AI5+3YUSjcbQxToyPqlk=
-github.com/paranoidd/teamcity-sdk-go v0.0.0-20190723173812-0e6d15147e9f/go.mod h1:e5rsdgTVY/P6FrNWGA4EchsD02dfvpUj46eI5gRLjPs=
-github.com/paranoidd/terraform-provider-teamcity v0.1.10 h1:AOhi7ogLSJgTP8wpz8phJhva9BTSJhCRnywhkXNrD1A=
-github.com/paranoidd/terraform-provider-teamcity v0.1.10/go.mod h1:FovMvH2oHt8RTETtiI/Qavv6Pq0D2LKeejW5Jy1fB8s=
 github.com/ChrisTrenkamp/goxpath v0.0.0-20170922090931-c385f95c6022/go.mod h1:nuWgzSkT5PnyOd+272uUmV0dnAnAn42Mk7PiQC5VzN4=
 github.com/Unknwon/com v0.0.0-20151008135407-28b053d5a292/go.mod h1:KYCjqMOeHpNuTOiFQU6WEcTG7poCJrUs0YgyHNtn1no=
 github.com/abdullin/seq v0.0.0-20160510034733-d5467c17e7af/go.mod h1:5Jv4cbFiHJMsVxt52+i0Ha45fjshj6wxYr1r19tB9bw=
@@ -248,7 +244,12 @@ github.com/onsi/ginkgo v1.7.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+W
 github.com/onsi/gomega v1.4.3/go.mod h1:ex+gbHU/CVuBBDIJjb2X0qEXbFg53c61hWP/1CpauHY=
 github.com/openzipkin/zipkin-go v0.1.1/go.mod h1:NtoC/o8u3JlF1lSlyPNswIbeQH9bJTmOf0Erfk+hxe8=
 github.com/packer-community/winrmcp v0.0.0-20180102160824-81144009af58/go.mod h1:f6Izs6JvFTdnRbziASagjZ2vmf55NSIkC/weStxCHqk=
+github.com/paranoidd/teamcity-sdk-go v0.0.0-20190723173812-0e6d15147e9f h1:AVztfKsoabMVIIxWHLDbiq+AI5+3YUSjcbQxToyPqlk=
+github.com/paranoidd/teamcity-sdk-go v0.0.0-20190723173812-0e6d15147e9f/go.mod h1:e5rsdgTVY/P6FrNWGA4EchsD02dfvpUj46eI5gRLjPs=
+github.com/paranoidd/teamcity-sdk-go v0.0.1 h1:NlGwktHscFLFagalYo8RaXzrO5QnawRxsJnYQ/IxkBk=
 github.com/paranoidd/teamcity-sdk-go v0.0.1/go.mod h1:mbL+5So7X+9YHVw9W6rPVdkiVKSVezt66Dd3YSGMAvM=
+github.com/paranoidd/terraform-provider-teamcity v0.1.10 h1:AOhi7ogLSJgTP8wpz8phJhva9BTSJhCRnywhkXNrD1A=
+github.com/paranoidd/terraform-provider-teamcity v0.1.10/go.mod h1:FovMvH2oHt8RTETtiI/Qavv6Pq0D2LKeejW5Jy1fB8s=
 github.com/pascaldekloe/goe v0.0.0-20180627143212-57f6aae5913c/go.mod h1:lzWF7FIEvWOWxwDKqyGYQf6ZUaNfKdP144TG7ZOy1lc=
 github.com/pkg/errors v0.0.0-20170505043639-c605e284fe17/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
